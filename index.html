@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ser Associado | APEG</title>
+  <meta name="description" content="Inscrição de sócio da Associação de Pais da Escola da Giesta (APEG)">
+  <style>
+    :root{
+      --navy:#0f2f5f; --blue:#1769e0; --blue-2:#0c83ff; --orange:#f7a51a;
+      --bg:#f6f9fd; --card:#fff; --line:#dce5f0; --text:#17304f; --muted:#66758d;
+      --ok:#1f9d62; --danger:#cc3344; --shadow:0 16px 40px rgba(28,64,108,.10);
+      --radius:22px;
+    }
+    *{box-sizing:border-box}
+    body{margin:0;font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:var(--text);
+      background:radial-gradient(circle at 10% 0%,rgba(23,105,224,.10),transparent 24rem),
+      radial-gradient(circle at 100% 15%,rgba(247,165,26,.10),transparent 22rem),var(--bg)}
+    header{position:sticky;top:0;z-index:20;background:rgba(255,255,255,.92);backdrop-filter:blur(10px);border-bottom:1px solid rgba(220,229,240,.9)}
+    .nav{max-width:1240px;margin:auto;padding:14px 22px;display:flex;align-items:center;justify-content:space-between;gap:20px}
+    .brand{display:flex;align-items:center;gap:14px}.brand img{width:64px;height:64px;object-fit:contain;border-radius:14px;background:#fff}
+    .brand-text strong{display:block;font-size:1.22rem;color:var(--navy)}.brand-text span{font-size:.88rem;color:var(--muted)}
+    .pill{background:linear-gradient(135deg,var(--blue),var(--blue-2));color:#fff;padding:12px 18px;border-radius:14px;font-weight:700;box-shadow:0 8px 20px rgba(23,105,224,.22)}
+    .layout{max-width:1240px;margin:34px auto;padding:0 22px;display:grid;grid-template-columns:.82fr 1.18fr;gap:28px}
+    .side{display:flex;flex-direction:column;gap:20px}.hero,.info-card,.form-card,.success{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow)}
+    .hero{padding:34px;overflow:hidden;position:relative}.hero:after{content:"";position:absolute;width:190px;height:190px;right:-70px;top:-70px;background:linear-gradient(135deg,rgba(23,105,224,.15),rgba(247,165,26,.16));border-radius:50%}
+    .hero h1{font-size:clamp(2.1rem,4vw,4rem);line-height:1.02;margin:0 0 18px;color:var(--navy);max-width:8ch}.hero p{font-size:1.05rem;line-height:1.65;color:var(--muted);margin:0}
+    .benefits{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:24px}.benefit{display:flex;gap:10px;align-items:center;padding:13px;border-radius:16px;background:#f7faff;border:1px solid #e4edf8;font-size:.92rem;font-weight:650}
+    .dot{width:34px;height:34px;display:grid;place-items:center;border-radius:50%;background:#e7f1ff;color:var(--blue)}
+    .info-card{padding:24px}.info-card h3{margin:0 0 9px;color:var(--navy)}.info-card p{margin:0;color:var(--muted);line-height:1.55}.fee{font-size:2rem;font-weight:800;color:var(--navy);margin:8px 0}
+    .form-card{padding:28px}.steps{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:28px}.step{text-align:center}.step .n{margin:auto;width:36px;height:36px;border-radius:50%;display:grid;place-items:center;background:#e9eef5;color:#6d7b90;font-weight:800}
+    .step.active .n{background:var(--blue);color:#fff}.step.done .n{background:var(--ok);color:#fff}.step small{display:block;margin-top:8px;color:#718096;font-size:.75rem}.step.active small{color:var(--blue);font-weight:800}
+    .panel{display:none}.panel.active{display:block}.section-title{display:flex;align-items:center;gap:14px;margin-bottom:20px}.section-icon{width:52px;height:52px;border-radius:16px;display:grid;place-items:center;background:#eaf3ff;color:var(--blue);font-size:1.5rem}
+    .section-title h2{margin:0;color:var(--navy);font-size:1.6rem}.section-title p{margin:4px 0 0;color:var(--muted)}.grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}.full{grid-column:1/-1}
+    label{display:block;font-weight:750;margin-bottom:8px}.req{color:var(--danger)}
+    input,select{width:100%;padding:15px 14px;border:1px solid #cbd7e6;border-radius:13px;font:inherit;color:var(--text);background:#fff;outline:none;transition:.2s}
+    input:focus,select:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(23,105,224,.10)} input.invalid,select.invalid{border-color:var(--danger);box-shadow:0 0 0 3px rgba(204,51,68,.08)}
+    .field-error{display:none;color:var(--danger);font-size:.84rem;margin-top:6px}.field-error.show{display:block}
+    .choice-list{display:grid;gap:11px}.choice{display:flex;align-items:flex-start;gap:12px;padding:14px;border:1px solid #d8e2ef;border-radius:14px;cursor:pointer;background:#fff}.choice input{width:auto;margin-top:3px}.choice strong{display:block}.choice span{display:block;color:var(--muted);font-size:.9rem;margin-top:3px}
+    .notice{margin-top:18px;padding:16px;border-radius:14px;background:#eef6ff;border:1px solid #d6eaff;color:#315a88;line-height:1.5}.actions{display:flex;justify-content:space-between;gap:12px;margin-top:26px}
+    button{border:0;border-radius:13px;padding:14px 20px;font:inherit;font-weight:800;cursor:pointer}.btn-secondary{background:#eef2f7;color:#506176}.btn-primary{background:linear-gradient(135deg,var(--blue),var(--blue-2));color:#fff;min-width:140px}.btn-primary:disabled{opacity:.65;cursor:not-allowed}
+    .progress{height:7px;background:#e8edf4;border-radius:999px;overflow:hidden;margin-bottom:22px}.progress span{display:block;height:100%;background:linear-gradient(90deg,var(--orange),var(--blue));width:25%;transition:.25s}
+    .error{display:none;margin-top:14px;padding:12px 14px;background:#fff0f1;border:1px solid #ffd0d5;color:#9d2432;border-radius:12px}.success{display:none;padding:42px;text-align:center}.success .big{font-size:3rem}.success h2{color:var(--navy)}
+    footer{max-width:1240px;margin:0 auto 40px;padding:0 22px;color:#8390a5;font-size:.88rem;text-align:center}
+    @media(max-width:900px){.layout{grid-template-columns:1fr}.hero h1{max-width:none}}
+    @media(max-width:620px){.nav{padding:10px 14px}.brand-text span{display:none}.pill{display:none}.layout{padding:0 12px;margin-top:18px}.hero,.form-card,.info-card{border-radius:18px}.hero{padding:24px}.form-card{padding:20px}.grid{grid-template-columns:1fr}.steps small{font-size:.66rem}.benefits{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+<header>
+  <div class="nav">
+    <div class="brand">
+      <img src="logo-apeg.jpg" alt="Logótipo APEG">
+      <div class="brand-text"><strong>APEG</strong><span>Associação de Pais da Escola da Giesta</span></div>
+    </div>
+    <div class="pill">Inscrição de Sócio</div>
+  </div>
+</header>
+
+<main class="layout">
+  <section class="side">
+    <div class="hero">
+      <h1>Juntos por uma escola melhor</h1>
+      <p>Pais, encarregados de educação e comunidade, unidos para apoiar os nossos filhos e contribuir para uma escola mais participativa.</p>
+      <div class="benefits">
+        <div class="benefit"><div class="dot">👥</div>Comunidade mais forte</div>
+        <div class="benefit"><div class="dot">📚</div>Apoio a projetos escolares</div>
+        <div class="benefit"><div class="dot">💛</div>Bem-estar dos alunos</div>
+        <div class="benefit"><div class="dot">✨</div>Mais iniciativas</div>
+      </div>
+    </div>
+    <div class="info-card"><h3>Porquê ser associado?</h3><p>Ao tornar-se associado da APEG contribui para iniciativas, projetos e atividades que enriquecem a vida escolar dos nossos filhos.</p></div>
+    <div class="info-card"><h3>Quota anual</h3><div class="fee">10€ <span style="font-size:1rem;font-weight:600">mínimo</span></div><p>Pode contribuir com o valor que pretender, a partir de 10 €.</p></div>
+  </section>
+
+  <section>
+    <div class="form-card" id="formCard">
+      <div class="steps">
+        <div class="step active"><div class="n">1</div><small>Dados pessoais</small></div>
+        <div class="step"><div class="n">2</div><small>Educando</small></div>
+        <div class="step"><div class="n">3</div><small>Quota e pagamento</small></div>
+        <div class="step"><div class="n">4</div><small>Consentimentos</small></div>
+      </div>
+      <div class="progress"><span id="progressBar"></span></div>
+
+      <form id="apegForm" novalidate>
+        <div class="panel active">
+          <div class="section-title"><div class="section-icon">👤</div><div><h2>Dados pessoais</h2><p>Preencha os seus dados para efetuar a inscrição como associado.</p></div></div>
+          <div class="grid">
+            <div class="full">
+              <label>Email <span class="req">*</span></label>
+              <input id="email" type="email" required placeholder="exemplo@email.com" autocomplete="email">
+              <div class="field-error" id="emailError">Introduza um email válido, por exemplo nome@dominio.pt.</div>
+            </div>
+            <div class="full">
+              <label>Nome completo <span class="req">*</span></label>
+              <input id="nome" type="text" required placeholder="O seu nome completo" autocomplete="name">
+            </div>
+            <div>
+              <label>Telemóvel <span class="req">*</span></label>
+              <input id="telemovel" type="tel" inputmode="numeric" pattern="[0-9]{9}" maxlength="9" required placeholder="912345678" autocomplete="tel">
+              <div class="field-error" id="phoneError">Introduza 9 algarismos, sem letras ou símbolos.</div>
+            </div>
+            <div>
+              <label>NIF</label>
+              <input id="nif" type="text" inputmode="numeric" pattern="[0-9]{9}" maxlength="9" placeholder="Opcional">
+              <div class="field-error" id="nifError">O NIF deve conter 9 algarismos.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="section-title"><div class="section-icon">🎓</div><div><h2>Dados do educando</h2><p>Indique os dados do aluno associado à inscrição.</p></div></div>
+          <div class="grid">
+            <div class="full">
+              <label>Nome do educando <span class="req">*</span></label>
+              <input id="educando" type="text" required placeholder="Nome do educando">
+            </div>
+            <div>
+              <label>Ano <span class="req">*</span></label>
+              <select id="ano" required>
+                <option value="">Selecionar</option>
+                <option>Pré</option>
+                <option>1º Ano</option>
+                <option>2º Ano</option>
+                <option>3º Ano</option>
+                <option>4º Ano</option>
+              </select>
+            </div>
+            <div>
+              <label>Turma <span class="req">*</span></label>
+              <select id="turma" required disabled>
+                <option value="">Selecione primeiro o ano</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="section-title"><div class="section-icon">€</div><div><h2>Quota e pagamento</h2><p>Escolha o valor da quota e a forma de pagamento.</p></div></div>
+          <div class="grid">
+            <div class="full">
+              <label>Valor que pretende pagar (€) <span class="req">*</span></label>
+              <input id="valor" type="number" required min="10" step="1" value="10">
+              <div class="field-error" id="valueError">O valor mínimo da quota anual é 10 €.</div>
+            </div>
+            <div class="full">
+              <label>Forma de pagamento <span class="req">*</span></label>
+              <div class="choice-list">
+                <label class="choice"><input type="radio" name="pagamento" value="MBWay (9111111111)" required><div><strong>MB Way</strong><span>9111111111</span></div></label>
+                <label class="choice"><input type="radio" name="pagamento" value="IBAN: [colocar IBAN]"><div><strong>Transferência bancária</strong><span>IBAN: [colocar IBAN]</span></div></label>
+                <label class="choice"><input type="radio" name="pagamento" value="Dinheiro (A um membro da Associacao de Pais)"><div><strong>Dinheiro</strong><span>Entregar a um membro da Associação de Pais</span></div></label>
+              </div>
+            </div>
+          </div>
+          <div class="notice">Após efetuar a transferência, envie o comprovativo para <strong>[xxx@APEG.pt]</strong>.<br>No assunto indique: <strong>Quota de Associado – Nome do encarregado de educação – Nome do educando</strong>.</div>
+        </div>
+
+        <div class="panel">
+          <div class="section-title"><div class="section-icon">✓</div><div><h2>Consentimentos</h2><p>Confirme as autorizações necessárias para concluir a inscrição.</p></div></div>
+          <div class="choice-list">
+            <div>
+              <label>Tratamento de dados pessoais <span class="req">*</span></label>
+              <label class="choice"><input type="radio" name="rgpd" value="Sim" required><div><strong>Sim</strong><span>Autorizo o tratamento dos meus dados pessoais para efeitos de gestão de associados.</span></div></label>
+              <label class="choice"><input type="radio" name="rgpd" value="Não"><div><strong>Não</strong></div></label>
+            </div>
+            <div style="margin-top:18px">
+              <label>Comunicações da associação <span class="req">*</span></label>
+              <label class="choice"><input type="radio" name="comunicacoes" value="Sim" required><div><strong>Sim</strong><span>Autorizo o envio de comunicações por email e/ou telemóvel.</span></div></label>
+              <label class="choice"><input type="radio" name="comunicacoes" value="Não"><div><strong>Não</strong></div></label>
+            </div>
+          </div>
+        </div>
+
+        <div id="formError" class="error">Preencha corretamente os campos obrigatórios antes de continuar.</div>
+        <div class="actions">
+          <button type="button" class="btn-secondary" id="backBtn">← Voltar</button>
+          <button type="button" class="btn-primary" id="nextBtn">Continuar →</button>
+          <button type="submit" class="btn-primary" id="submitBtn" style="display:none">Concluir inscrição</button>
+        </div>
+      </form>
+    </div>
+
+    <div class="success" id="successBox">
+      <div class="big">🎉</div>
+      <h2>Inscrição registada!</h2>
+      <p>Obrigado por se juntar à APEG. A sua inscrição foi enviada com sucesso.</p>
+      <p>Se efetuou pagamento por transferência, não se esqueça de enviar o comprovativo para o email da associação.</p>
+    </div>
+  </section>
+</main>
+<footer>APEG — Associação de Pais da Escola da Giesta · Página de inscrição de associado</footer>
+
+<script>
+  // SUBSTITUIR pelo URL do Google Apps Script publicado como "Aplicação Web".
+  const APPS_SCRIPT_URL = "COLOQUE_AQUI_O_URL_DO_APPS_SCRIPT";
+
+  const panels=[...document.querySelectorAll('.panel')];
+  const steps=[...document.querySelectorAll('.step')];
+  const nextBtn=document.getElementById('nextBtn'), backBtn=document.getElementById('backBtn'),
+        submitBtn=document.getElementById('submitBtn'), progressBar=document.getElementById('progressBar'),
+        errorBox=document.getElementById('formError'), form=document.getElementById('apegForm');
+  const email=document.getElementById('email'), phone=document.getElementById('telemovel'),
+        nif=document.getElementById('nif'), valor=document.getElementById('valor'),
+        ano=document.getElementById('ano'), turma=document.getElementById('turma');
+  let current=0;
+
+  function onlyDigits(el){
+    el.value = el.value.replace(/\D/g,'');
+  }
+  phone.addEventListener('input',()=>onlyDigits(phone));
+  nif.addEventListener('input',()=>onlyDigits(nif));
+
+  ano.addEventListener('change',()=>{
+    const v=ano.value;
+    turma.innerHTML='';
+    const first=document.createElement('option');
+    first.value=''; first.textContent='Selecionar';
+    turma.appendChild(first);
+    let opts=[];
+    if(v==='Pré') opts=['Sala 6','Sala 7'];
+    else if(v) opts=['T','E'];
+    opts.forEach(o=>{
+      const op=document.createElement('option'); op.value=o; op.textContent=o; turma.appendChild(op);
+    });
+    turma.disabled=!v;
+    turma.value='';
+  });
+
+  function validEmail(v){
+    return /^[^\s@]+@[^\s@]+\.[A-Za-z]{2,}$/.test(v.trim());
+  }
+  function setErr(el,id,on){
+    el.classList.toggle('invalid',on);
+    document.getElementById(id)?.classList.toggle('show',on);
+  }
+  function validateCustom(){
+    let ok=true;
+    if(email.closest('.panel').classList.contains('active')){
+      const bad=!validEmail(email.value); setErr(email,'emailError',bad); if(bad) ok=false;
+      const pbad=!/^\d{9}$/.test(phone.value); setErr(phone,'phoneError',pbad); if(pbad) ok=false;
+      const nbad=nif.value!=='' && !/^\d{9}$/.test(nif.value); setErr(nif,'nifError',nbad); if(nbad) ok=false;
+    }
+    if(valor.closest('.panel').classList.contains('active')){
+      const vbad=Number(valor.value)<10; setErr(valor,'valueError',vbad); if(vbad) ok=false;
+    }
+    return ok;
+  }
+  function validatePanel(){
+    errorBox.style.display='none';
+    let ok=validateCustom();
+    const fields=[...panels[current].querySelectorAll('input,select')];
+    const radioNames=new Set();
+    fields.forEach(f=>{
+      if(f.type==='radio'){ radioNames.add(f.name); return; }
+      if(f.required && !f.value){ f.classList.add('invalid'); ok=false; }
+      else if(!f.classList.contains('invalid')) f.classList.remove('invalid');
+    });
+    radioNames.forEach(name=>{
+      const group=[...panels[current].querySelectorAll(`input[type="radio"][name="${name}"]`)];
+      if(group.some(r=>r.required) && !group.some(r=>r.checked)) ok=false;
+    });
+    if(!ok) errorBox.style.display='block';
+    return ok;
+  }
+  function updateUI(){
+    panels.forEach((p,i)=>p.classList.toggle('active',i===current));
+    steps.forEach((s,i)=>{s.classList.toggle('active',i===current);s.classList.toggle('done',i<current)});
+    progressBar.style.width=((current+1)/panels.length*100)+'%';
+    backBtn.style.visibility=current===0?'hidden':'visible';
+    nextBtn.style.display=current===panels.length-1?'none':'inline-block';
+    submitBtn.style.display=current===panels.length-1?'inline-block':'none';
+    errorBox.style.display='none';
+    window.scrollTo({top:0,behavior:'smooth'});
+  }
+  nextBtn.addEventListener('click',()=>{if(validatePanel()){current++;updateUI()}});
+  backBtn.addEventListener('click',()=>{if(current>0){current--;updateUI()}});
+
+  form.addEventListener('submit', async (e)=>{
+    e.preventDefault();
+    if(!validatePanel()) return;
+    if(!APPS_SCRIPT_URL || APPS_SCRIPT_URL.includes('COLOQUE_AQUI')){
+      errorBox.textContent='Falta configurar o URL do Google Apps Script no ficheiro index.html.';
+      errorBox.style.display='block';
+      return;
+    }
+
+    const pagamento=document.querySelector('input[name="pagamento"]:checked')?.value || '';
+    const rgpd=document.querySelector('input[name="rgpd"]:checked')?.value || '';
+    const comunicacoes=document.querySelector('input[name="comunicacoes"]:checked')?.value || '';
+
+    const payload={
+      email: email.value.trim(),
+      nome: document.getElementById('nome').value.trim(),
+      telemovel: phone.value.trim(),
+      nif: nif.value.trim(),
+      educando: document.getElementById('educando').value.trim(),
+      ano: ano.value,
+      turma: turma.value,
+      valor: valor.value,
+      pagamento, rgpd, comunicacoes
+    };
+
+    submitBtn.disabled=true;
+    submitBtn.textContent='A enviar...';
+    errorBox.style.display='none';
+
+    try{
+      const res=await fetch(APPS_SCRIPT_URL,{
+        method:'POST',
+        headers:{'Content-Type':'text/plain;charset=utf-8'},
+        body:JSON.stringify(payload)
+      });
+      const txt=await res.text();
+      let data={};
+      try{data=JSON.parse(txt)}catch(_){}
+      if(!res.ok || data.ok===false) throw new Error(data.error || 'Falha no envio');
+      document.getElementById('formCard').style.display='none';
+      document.getElementById('successBox').style.display='block';
+      window.scrollTo({top:0,behavior:'smooth'});
+    }catch(err){
+      errorBox.textContent='Não foi possível concluir a inscrição. Tente novamente ou contacte a APEG.';
+      errorBox.style.display='block';
+      submitBtn.disabled=false;
+      submitBtn.textContent='Concluir inscrição';
+      console.error(err);
+    }
+  });
+
+  updateUI();
+</script>
+</body>
+</html>
