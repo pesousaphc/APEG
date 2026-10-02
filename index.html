@@ -70,7 +70,7 @@
       </div>
     </div>
     <div class="info-card"><h3>Porquê ser associado?</h3><p>Ao tornar-se associado da APEG contribui para iniciativas, projetos e atividades que enriquecem a vida escolar dos nossos filhos.</p></div>
-    <div class="info-card"><h3>Quota anual</h3><div class="fee">10€ <span style="font-size:1rem;font-weight:600">mínimo</span></div><p>Pode contribuir com o valor que pretender, a partir de 10 €.</p></div>
+    <div class="info-card"><h3>Quota anual</h3><div class="fee">5€ <span style="font-size:1rem;font-weight:600">mínimo</span></div><p>Pode contribuir com o valor que pretender, a partir de 5 €.</p></div>
   </section>
 
   <section>
@@ -99,15 +99,10 @@
               <label>Nome completo <span class="req">*</span></label>
               <input id="nome" name="entry.1570699673" type="text" required placeholder="O seu nome completo" autocomplete="name">
             </div>
-            <div>
+            <div class="full">
               <label>Telemóvel <span class="req">*</span></label>
               <input id="telemovel" name="entry.1244337446" type="tel" inputmode="numeric" pattern="[0-9]{9}" maxlength="9" required placeholder="912345678" autocomplete="tel">
               <div class="field-error" id="phoneError">Introduza 9 algarismos, sem letras ou símbolos.</div>
-            </div>
-            <div>
-              <label>NIF</label>
-              <input id="nif" name="entry.1411622296" type="text" inputmode="numeric" pattern="[0-9]{9}" maxlength="9" placeholder="Opcional">
-              <div class="field-error" id="nifError">O NIF deve conter 9 algarismos.</div>
             </div>
           </div>
         </div>
@@ -156,19 +151,28 @@
           <div class="grid">
             <div class="full">
               <label>Valor que pretende pagar (€) <span class="req">*</span></label>
-              <input id="valor" name="entry.1815716533" type="number" required min="10" step="1" value="10">
-              <div class="field-error" id="valueError">O valor mínimo da quota anual é 10 €.</div>
+              <input id="valor" name="entry.1815716533" type="number" required min="5" step="1" value="5">
+              <div class="field-error" id="valueError">O valor mínimo da quota anual é 5 €.</div>
             </div>
             <div class="full">
               <label>Forma de pagamento <span class="req">*</span></label>
               <div class="choice-list">
-                <label class="choice"><input type="radio" name="entry.1330716454" data-role="pagamento" value="MBWay 9111111111" required><div><strong>MB Way</strong><span>9111111111</span></div></label>
-                <label class="choice"><input type="radio" name="entry.1330716454" data-role="pagamento" value="IBAN: PT50 0033 0000 4548 4837 6450 5"><div><strong>Transferência bancária</strong><span>IBAN: PT50 0033 0000 4548 4837 6450 5</span></div></label>
-                <label class="choice"><input type="radio" name="entry.1330716454" data-role="pagamento" value="Dinheiro (entregar a APEG ou Diretor de Turma)"><div><strong>Dinheiro</strong><span>Entregar à APEG ou Diretor de Turma</span></div></label>
+                <label class="choice"><input type="radio" name="entry.1330716454" data-role="pagamento" value="IBAN: PT50 0033 0000 4548 4837 6450 5" required><div><strong>Transferência bancária</strong><span>IBAN: PT50 0033 0000 4548 4837 6450 5</span></div></label>
+                <label class="choice"><input type="radio" name="entry.1330716454" data-role="pagamento" value="Dinheiro (entregar num envelope fechado dirigido a APEG ou ao professor(a) titular)"><div><strong>Dinheiro</strong><span>Entregar num envelope fechado à APEG ou ao professor(a) titular</span></div></label>
               </div>
             </div>
           </div>
-          <div class="notice">Após efetuar a transferência, envie o comprovativo para <strong>apeb1giesta@gmail.com</strong>.<br>No assunto indique: <strong>Quota de Associado – Nome do encarregado de educação – Nome do educando</strong>.</div>
+          <div class="notice">
+            <strong>Pagamento por transferência bancária</strong><br>
+            Após efetuar a transferência, envie o comprovativo para:<br>
+            <strong>apeb1giesta@gmail.com</strong><br><br>
+            No assunto do email indique:<br>
+            <strong>Quota de Associado – Nome do encarregado de educação – Nome(s) do(s) educando(s)</strong><br><br>
+            <strong>Pagamento em dinheiro</strong><br>
+            O valor deverá ser entregue <strong>num envelope fechado à APEG ou ao professor titular</strong>.<br>
+            No exterior do envelope deverá constar obrigatoriamente o <strong>nome do encarregado de educação e o nome do(s) educando(s)</strong>.<br><br>
+            Desta forma, conseguimos identificar e associar corretamente o pagamento à respetiva inscrição.
+          </div>
         </div>
 
         <div class="panel">
@@ -214,12 +218,11 @@ const panels=[...document.querySelectorAll('.panel')];
         submitBtn=document.getElementById('submitBtn'), progressBar=document.getElementById('progressBar'),
         errorBox=document.getElementById('formError'), form=document.getElementById('apegForm');
   const email=document.getElementById('email'), phone=document.getElementById('telemovel'),
-        nif=document.getElementById('nif'), valor=document.getElementById('valor');
+        valor=document.getElementById('valor');
   let current=0;
 
   function onlyDigits(el){ el.value = el.value.replace(/\D/g,''); }
   phone.addEventListener('input',()=>onlyDigits(phone));
-  nif.addEventListener('input',()=>onlyDigits(nif));
 
   function configureTurma(anoEl,turmaEl){
     anoEl.addEventListener('change',()=>{
@@ -253,10 +256,9 @@ const panels=[...document.querySelectorAll('.panel')];
     if(email.closest('.panel').classList.contains('active')){
       const bad=!validEmail(email.value); setErr(email,'emailError',bad); if(bad) ok=false;
       const pbad=!/^\d{9}$/.test(phone.value); setErr(phone,'phoneError',pbad); if(pbad) ok=false;
-      const nbad=nif.value!=='' && !/^\d{9}$/.test(nif.value); setErr(nif,'nifError',nbad); if(nbad) ok=false;
     }
     if(valor.closest('.panel').classList.contains('active')){
-      const vbad=Number(valor.value)<10; setErr(valor,'valueError',vbad); if(vbad) ok=false;
+      const vbad=Number(valor.value)<5; setErr(valor,'valueError',vbad); if(vbad) ok=false;
     }
     return ok;
   }
@@ -342,7 +344,7 @@ const panels=[...document.querySelectorAll('.panel')];
     envioIniciado=false;
 
     // Repõe o valor mínimo da quota.
-    valor.value='10';
+    valor.value='5';
 
     // Esconde educandos até voltar a escolher 1, 2 ou 3.
     for(let i=1;i<=3;i++){
