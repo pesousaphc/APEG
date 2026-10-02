@@ -191,7 +191,6 @@
           <button type="submit" class="btn-primary" id="submitBtn" style="display:none">Concluir inscrição</button>
         </div>
       </form>
-<iframe id="appsScriptFrame" name="appsScriptFrame" style="display:none"></iframe>
     </div>
 
     <div class="success" id="successBox">
@@ -288,27 +287,29 @@
   nextBtn.addEventListener('click',()=>{if(validatePanel()){current++;updateUI()}});
   backBtn.addEventListener('click',()=>{if(current>0){current--;updateUI()}});
 
-  const appsFrame = document.getElementById('appsScriptFrame');
   let envioTimeout = null;
+  let jsonpScript = null;
 
-  window.addEventListener('message', (event)=>{
-    if(event.origin !== 'https://script.google.com' && event.origin !== 'https://script.googleusercontent.com') return;
-    const data = event.data || {};
-    if(data.source !== 'APEG') return;
-
+  window.apegReceive = function(data){
     clearTimeout(envioTimeout);
+    if(jsonpScript){
+      jsonpScript.remove();
+      jsonpScript = null;
+    }
 
-    if(data.ok){
+    if(data && data.ok){
       document.getElementById('formCard').style.display='none';
       document.getElementById('successBox').style.display='block';
       window.scrollTo({top:0,behavior:'smooth'});
     }else{
-      errorBox.textContent='Não foi possível concluir a inscrição: ' + (data.error || 'erro não identificado') + ' [Ref. ' + (data.trace || '-') + ']';
+      const detalhe = data && data.error ? data.error : 'Erro não identificado no Apps Script.';
+      const ref = data && data.trace ? ' [Ref. ' + data.trace + ']' : '';
+      errorBox.textContent='Não foi possível concluir a inscrição: ' + detalhe + ref;
       errorBox.style.display='block';
       submitBtn.disabled=false;
       submitBtn.textContent='Concluir inscrição';
     }
-  });
+  };
 
   form.addEventListener('submit', (e)=>{
     e.preventDefault();
@@ -346,11 +347,32 @@
     submitBtn.textContent='A enviar...';
     errorBox.style.display='none';
 
-    const encoded = encodeURIComponent(JSON.stringify(payload));
-    appsFrame.src = APPS_SCRIPT_URL + '?payload=' + encoded + '&_=' + Date.now();
+    // JSONP: carrega uma resposta JavaScript do Apps Script.
+    // Um <script src="..."> pode atravessar domínios sem CORS, ao contrário de fetch/iframe.
+    if(jsonpScript) jsonpScript.remove();
+    jsonpScript=document.createElement('script');
+    jsonpScript.async=true;
+    jsonpScript.src=APPS_SCRIPT_URL
+      + '?callback=apegReceive'
+      + '&payload=' + encodeURIComponent(JSON.stringify(payload))
+      + '&_=' + Date.now();
+
+    jsonpScript.onerror=()=>{
+      clearTimeout(envioTimeout);
+      errorBox.textContent='Não foi possível contactar o Google Apps Script. Verifique a implementação Web App e tente novamente.';
+      errorBox.style.display='block';
+      submitBtn.disabled=false;
+      submitBtn.textContent='Concluir inscrição';
+    };
+
+    document.body.appendChild(jsonpScript);
 
     envioTimeout=setTimeout(()=>{
-      errorBox.textContent='O Google Apps Script não confirmou a gravação em 20 segundos. Consulte Apps Script > Execuções.';
+      if(jsonpScript){
+        jsonpScript.remove();
+        jsonpScript=null;
+      }
+      errorBox.textContent='O Google Apps Script não respondeu em 20 segundos. Consulte Apps Script > Execuções.';
       errorBox.style.display='block';
       submitBtn.disabled=false;
       submitBtn.textContent='Concluir inscrição';
