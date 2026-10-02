@@ -1,326 +1,134 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="pt-PT">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Ser Associado | APEG</title>
-  <meta name="description" content="Inscrição de sócio da Associação de Pais da Escola da Giesta (APEG)">
-  <style>
-    :root{
-      --navy:#0f2f5f; --blue:#1769e0; --blue-2:#0c83ff; --orange:#f7a51a;
-      --bg:#f6f9fd; --card:#fff; --line:#dce5f0; --text:#17304f; --muted:#66758d;
-      --ok:#1f9d62; --danger:#cc3344; --shadow:0 16px 40px rgba(28,64,108,.10);
-      --radius:22px;
-    }
-    *{box-sizing:border-box}
-    body{margin:0;font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:var(--text);
-      background:radial-gradient(circle at 10% 0%,rgba(23,105,224,.10),transparent 24rem),
-      radial-gradient(circle at 100% 15%,rgba(247,165,26,.10),transparent 22rem),var(--bg)}
-    header{position:sticky;top:0;z-index:20;background:rgba(255,255,255,.92);backdrop-filter:blur(10px);border-bottom:1px solid rgba(220,229,240,.9)}
-    .nav{max-width:1240px;margin:auto;padding:14px 22px;display:flex;align-items:center;justify-content:space-between;gap:20px}
-    .brand{display:flex;align-items:center;gap:14px}.brand img{width:84px;height:84px;object-fit:contain;border-radius:16px;background:#fff;padding:2px;border:1px solid #e2e8f0}
-    .brand-text strong{display:block;font-size:1.22rem;color:var(--navy)}.brand-text span{font-size:.88rem;color:var(--muted)}
-    .pill{background:linear-gradient(135deg,var(--blue),var(--blue-2));color:#fff;padding:12px 18px;border-radius:14px;font-weight:700;box-shadow:0 8px 20px rgba(23,105,224,.22)}
-    .layout{max-width:1240px;margin:34px auto;padding:0 22px;display:grid;grid-template-columns:.82fr 1.18fr;gap:28px}
-    .side{display:flex;flex-direction:column;gap:20px}.hero,.info-card,.form-card,.success{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow)}
-    .hero{padding:34px;overflow:hidden;position:relative}.hero:after{content:"";position:absolute;width:190px;height:190px;right:-70px;top:-70px;background:linear-gradient(135deg,rgba(23,105,224,.15),rgba(247,165,26,.16));border-radius:50%}
-    .hero h1{font-size:clamp(2.1rem,4vw,4rem);line-height:1.02;margin:0 0 18px;color:var(--navy);max-width:8ch}.hero p{font-size:1.05rem;line-height:1.65;color:var(--muted);margin:0}
-    .benefits{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:24px}.benefit{display:flex;gap:10px;align-items:center;padding:13px;border-radius:16px;background:#f7faff;border:1px solid #e4edf8;font-size:.92rem;font-weight:650}
-    .dot{width:34px;height:34px;display:grid;place-items:center;border-radius:50%;background:#e7f1ff;color:var(--blue)}
-    .info-card{padding:24px}.info-card h3{margin:0 0 9px;color:var(--navy)}.info-card p{margin:0;color:var(--muted);line-height:1.55}.fee{font-size:2rem;font-weight:800;color:var(--navy);margin:8px 0}
-    .form-card{padding:28px}.steps{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:28px}.step{text-align:center}.step .n{margin:auto;width:36px;height:36px;border-radius:50%;display:grid;place-items:center;background:#e9eef5;color:#6d7b90;font-weight:800}
-    .step.active .n{background:var(--blue);color:#fff}.step.done .n{background:var(--ok);color:#fff}.step small{display:block;margin-top:8px;color:#718096;font-size:.75rem}.step.active small{color:var(--blue);font-weight:800}
-    .panel{display:none}.panel.active{display:block}.section-title{display:flex;align-items:center;gap:14px;margin-bottom:20px}.section-icon{width:52px;height:52px;border-radius:16px;display:grid;place-items:center;background:#eaf3ff;color:var(--blue);font-size:1.5rem}
-    .section-title h2{margin:0;color:var(--navy);font-size:1.6rem}.section-title p{margin:4px 0 0;color:var(--muted)}.grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}.full{grid-column:1/-1}
-    label{display:block;font-weight:750;margin-bottom:8px}.req{color:var(--danger)}
-    input,select{width:100%;padding:15px 14px;border:1px solid #cbd7e6;border-radius:13px;font:inherit;color:var(--text);background:#fff;outline:none;transition:.2s}
-    input:focus,select:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(23,105,224,.10)} input.invalid,select.invalid{border-color:var(--danger);box-shadow:0 0 0 3px rgba(204,51,68,.08)}
-    .field-error{display:none;color:var(--danger);font-size:.84rem;margin-top:6px}.field-error.show{display:block}
-    .choice-list{display:grid;gap:11px}.choice{display:flex;align-items:flex-start;gap:12px;padding:14px;border:1px solid #d8e2ef;border-radius:14px;cursor:pointer;background:#fff}.choice input{width:auto;margin-top:3px}.choice strong{display:block}.choice span{display:block;color:var(--muted);font-size:.9rem;margin-top:3px}
-    .notice{margin-top:18px;padding:16px;border-radius:14px;background:#eef6ff;border:1px solid #d6eaff;color:#315a88;line-height:1.5}.actions{display:flex;justify-content:space-between;gap:12px;margin-top:26px}
-    button{border:0;border-radius:13px;padding:14px 20px;font:inherit;font-weight:800;cursor:pointer}.btn-secondary{background:#eef2f7;color:#506176}.btn-primary{background:linear-gradient(135deg,var(--blue),var(--blue-2));color:#fff;min-width:140px}.btn-primary:disabled{opacity:.65;cursor:not-allowed}
-    .progress{height:7px;background:#e8edf4;border-radius:999px;overflow:hidden;margin-bottom:22px}.progress span{display:block;height:100%;background:linear-gradient(90deg,var(--orange),var(--blue));width:25%;transition:.25s}
-    .error{display:none;margin-top:14px;padding:12px 14px;background:#fff0f1;border:1px solid #ffd0d5;color:#9d2432;border-radius:12px}.success{display:none;padding:42px;text-align:center}.success .big{font-size:3rem}.success h2{color:var(--navy)}
-    footer{max-width:1240px;margin:0 auto 40px;padding:0 22px;color:#8390a5;font-size:.88rem;text-align:center}
-    @media(max-width:900px){.layout{grid-template-columns:1fr}.hero h1{max-width:none}}
-    @media(max-width:620px){.nav{padding:10px 14px}.brand-text span{display:none}.pill{display:none}.layout{padding:0 12px;margin-top:18px}.hero,.form-card,.info-card{border-radius:18px}.hero{padding:24px}.form-card{padding:20px}.grid{grid-template-columns:1fr}.steps small{font-size:.66rem}.benefits{grid-template-columns:1fr}}
-  </style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>APEG - Inscrição de Sócio</title>
+<style>
+body{font-family:Arial,sans-serif;margin:0;background:#f5f8fc;color:#17304f}
+.wrap{max-width:1100px;margin:30px auto;padding:0 20px}
+.card{background:#fff;border:1px solid #dce5f0;border-radius:18px;padding:24px;margin-bottom:18px}
+.hidden{display:none}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.full{grid-column:1/-1}
+input,select{width:100%;padding:12px;border:1px solid #cbd7e6;border-radius:10px;font:inherit}
+button{padding:12px 18px;border:0;border-radius:10px;font-weight:700;cursor:pointer}
+.primary{background:#1769e0;color:#fff} .secondary{background:#eef2f7;color:#506176}
+.row{display:flex;justify-content:space-between;gap:12px;margin-top:20px}
+.choice{display:block;padding:12px;border:1px solid #d8e2ef;border-radius:10px;margin-bottom:10px}
+.notice{background:#eef6ff;border:1px solid #d6eaff;padding:14px;border-radius:10px;margin-top:14px}
+.error{color:#c93646;font-size:.85rem;margin-top:5px;display:none}
+.step{display:none} .step.active{display:block}
+.kid{border:1px solid #dbe6f2;border-radius:14px;padding:16px;margin-top:14px;background:#fbfdff}
+header{background:#fff;border-bottom:1px solid #dce5f0}
+header .bar{max-width:1100px;margin:auto;padding:12px 20px;display:flex;align-items:center;gap:12px}
+header img{width:58px;height:58px;object-fit:contain;border-radius:10px}
+@media(max-width:700px){.grid{grid-template-columns:1fr}}
+</style>
 </head>
 <body>
-<header>
-  <div class="nav">
-    <div class="brand">
-      <img src="logo-apeg.jpg" alt="Logótipo APEG">
-      <div class="brand-text"><strong>APEG</strong><span>Associação de Pais da Escola da Giesta</span></div>
-    </div>
-    <div class="pill">Inscrição de Sócio</div>
-  </div>
-</header>
+<header><div class="bar"><img src="logo-apeg.jpg"><div><b>APEG</b><br>Associação de Pais da Escola da Giesta</div></div></header>
+<div class="wrap">
+<div class="card">
+<form id="form" action="https://script.google.com/macros/s/AKfycbxgsJ7PRif3BN-104mGDiHd31LQonDWWM1afNl3HoWQwqSEo3hjFRwOnV3vDUYW_IWO8g/exec" method="post" target="hidden_iframe" novalidate>
+<div class="step active">
+<h2>Dados pessoais</h2>
+<div class="grid">
+<div class="full"><label>Email *</label><input id="email" name="email" required><div id="emailErr" class="error">Introduza um email válido.</div></div>
+<div class="full"><label>Nome completo *</label><input name="nome" required></div>
+<div><label>Telemóvel *</label><input id="tel" name="telemovel" maxlength="9" inputmode="numeric" required><div id="telErr" class="error">Introduza 9 algarismos.</div></div>
+<div><label>NIF</label><input id="nif" name="nif" maxlength="9" inputmode="numeric"><div id="nifErr" class="error">O NIF deve conter 9 algarismos.</div></div>
+</div>
+</div>
 
-<main class="layout">
-  <section class="side">
-    <div class="hero">
-      <h1>Juntos por uma escola melhor</h1>
-      <p>Pais, encarregados de educação e comunidade, unidos para apoiar os nossos filhos e contribuir para uma escola mais participativa.</p>
-      <div class="benefits">
-        <div class="benefit"><div class="dot">👥</div>Comunidade mais forte</div>
-        <div class="benefit"><div class="dot">📚</div>Apoio a projetos escolares</div>
-        <div class="benefit"><div class="dot">💛</div>Bem-estar dos alunos</div>
-        <div class="benefit"><div class="dot">✨</div>Mais iniciativas</div>
-      </div>
-    </div>
-    <div class="info-card"><h3>Porquê ser associado?</h3><p>Ao tornar-se associado da APEG contribui para iniciativas, projetos e atividades que enriquecem a vida escolar dos nossos filhos.</p></div>
-    <div class="info-card"><h3>Quota anual</h3><div class="fee">10€ <span style="font-size:1rem;font-weight:600">mínimo</span></div><p>Pode contribuir com o valor que pretender, a partir de 10 €.</p></div>
-  </section>
+<div class="step">
+<h2>Dados dos educandos</h2>
+<label>Número de educandos *</label>
+<select id="numEducandos" name="numEducandos" required>
+<option value="">Selecionar</option><option value="1">1 educando</option><option value="2">2 educandos</option><option value="3">3 educandos</option>
+</select>
 
-  <section>
-    <div class="form-card" id="formCard">
-      <div class="steps">
-        <div class="step active"><div class="n">1</div><small>Dados pessoais</small></div>
-        <div class="step"><div class="n">2</div><small>Educando</small></div>
-        <div class="step"><div class="n">3</div><small>Quota e pagamento</small></div>
-        <div class="step"><div class="n">4</div><small>Consentimentos</small></div>
-      </div>
-      <div class="progress"><span id="progressBar"></span></div>
+<div id="kid1" class="kid hidden">
+<h3>Educando 1</h3><div class="grid">
+<div class="full"><label>Nome *</label><input id="educando1" name="educando1"></div>
+<div><label>Ano *</label><select id="ano1" name="ano1"><option value="">Selecionar</option><option>Pré</option><option>1º Ano</option><option>2º Ano</option><option>3º Ano</option><option>4º Ano</option></select></div>
+<div><label>Turma *</label><select id="turma1" name="turma1" disabled><option value="">Selecione primeiro o ano</option></select></div>
+</div></div>
 
-      <form id="apegForm" novalidate>
-        <div class="panel active">
-          <div class="section-title"><div class="section-icon">👤</div><div><h2>Dados pessoais</h2><p>Preencha os seus dados para efetuar a inscrição como associado.</p></div></div>
-          <div class="grid">
-            <div class="full">
-              <label>Email <span class="req">*</span></label>
-              <input id="email" type="email" required placeholder="exemplo@email.com" autocomplete="email">
-              <div class="field-error" id="emailError">Introduza um email válido, por exemplo nome@dominio.pt.</div>
-            </div>
-            <div class="full">
-              <label>Nome completo <span class="req">*</span></label>
-              <input id="nome" type="text" required placeholder="O seu nome completo" autocomplete="name">
-            </div>
-            <div>
-              <label>Telemóvel <span class="req">*</span></label>
-              <input id="telemovel" type="tel" inputmode="numeric" pattern="[0-9]{9}" maxlength="9" required placeholder="912345678" autocomplete="tel">
-              <div class="field-error" id="phoneError">Introduza 9 algarismos, sem letras ou símbolos.</div>
-            </div>
-            <div>
-              <label>NIF</label>
-              <input id="nif" type="text" inputmode="numeric" pattern="[0-9]{9}" maxlength="9" placeholder="Opcional">
-              <div class="field-error" id="nifError">O NIF deve conter 9 algarismos.</div>
-            </div>
-          </div>
-        </div>
+<div id="kid2" class="kid hidden">
+<h3>Educando 2</h3><div class="grid">
+<div class="full"><label>Nome *</label><input id="educando2" name="educando2"></div>
+<div><label>Ano *</label><select id="ano2" name="ano2"><option value="">Selecionar</option><option>Pré</option><option>1º Ano</option><option>2º Ano</option><option>3º Ano</option><option>4º Ano</option></select></div>
+<div><label>Turma *</label><select id="turma2" name="turma2" disabled><option value="">Selecione primeiro o ano</option></select></div>
+</div></div>
 
-        <div class="panel">
-          <div class="section-title"><div class="section-icon">🎓</div><div><h2>Dados dos educandos</h2><p>Indique quantos educandos pretende associar a esta inscrição.</p></div></div>
+<div id="kid3" class="kid hidden">
+<h3>Educando 3</h3><div class="grid">
+<div class="full"><label>Nome *</label><input id="educando3" name="educando3"></div>
+<div><label>Ano *</label><select id="ano3" name="ano3"><option value="">Selecionar</option><option>Pré</option><option>1º Ano</option><option>2º Ano</option><option>3º Ano</option><option>4º Ano</option></select></div>
+<div><label>Turma *</label><select id="turma3" name="turma3" disabled><option value="">Selecione primeiro o ano</option></select></div>
+</div></div>
+</div>
 
-          <div class="full" style="margin-bottom:20px">
-            <label>Número de educandos <span class="req">*</span></label>
-            <div class="choice-list" style="grid-template-columns:repeat(3,1fr)">
-              <label class="choice"><input type="radio" name="numEducandos" value="1" required><div><strong>1 educando</strong></div></label>
-              <label class="choice"><input type="radio" name="numEducandos" value="2"><div><strong>2 educandos</strong></div></label>
-              <label class="choice"><input type="radio" name="numEducandos" value="3"><div><strong>3 educandos</strong></div></label>
-            </div>
-          </div>
+<div class="step">
+<h2>Quota e pagamento</h2>
+<label>Valor a pagar (€) *</label><input id="valor" type="number" name="valor" min="10" value="10" required><div id="valorErr" class="error">O valor mínimo é 10 €.</div>
+<h3>Forma de pagamento *</h3>
+<label class="choice"><input type="radio" name="pagamento" value="MBWay (9111111111)" required> MB Way - 9111111111</label>
+<label class="choice"><input type="radio" name="pagamento" value="IBAN: [PT50 0033 0000 4548 4837 6450 5]"> Transferência bancária - PT50 0033 0000 4548 4837 6450 5</label>
+<label class="choice"><input type="radio" name="pagamento" value="Dinheiro (A um membro da Associacao de Pais)"> Dinheiro</label>
+<div class="notice">Envie o comprovativo para <b>apeb1giesta@gmail.com</b><br>Assunto: <b>Quota de Associado – Nome do encarregado de educação – Nome do educando</b></div>
+</div>
 
-          <div id="educando1" class="educando-block" style="display:none">
-            <h3 style="color:var(--navy);margin:10px 0 16px">Educando 1</h3>
-            <div class="grid">
-              <div class="full"><label>Nome do educando <span class="req">*</span></label><input id="educando1Nome" type="text" placeholder="Nome do educando"></div>
-              <div><label>Ano <span class="req">*</span></label><select id="educando1Ano"><option value="">Selecionar</option><option>Pré</option><option>1º Ano</option><option>2º Ano</option><option>3º Ano</option><option>4º Ano</option></select></div>
-              <div><label>Turma <span class="req">*</span></label><select id="educando1Turma" disabled><option value="">Selecione primeiro o ano</option></select></div>
-            </div>
-          </div>
+<div class="step">
+<h2>Consentimentos</h2>
+<label class="choice"><input type="radio" name="rgpd" value="Sim" required> Sim, autorizo o tratamento dos dados pessoais para gestão de associados.</label>
+<label class="choice"><input type="radio" name="rgpd" value="Não"> Não</label>
+<label class="choice"><input type="radio" name="comunicacoes" value="Sim" required> Sim, autorizo comunicações por email e/ou telemóvel.</label>
+<label class="choice"><input type="radio" name="comunicacoes" value="Não"> Não</label>
+</div>
 
-          <div id="educando2" class="educando-block" style="display:none;margin-top:24px;padding-top:22px;border-top:1px solid var(--line)">
-            <h3 style="color:var(--navy);margin:0 0 16px">Educando 2</h3>
-            <div class="grid">
-              <div class="full"><label>Nome do educando <span class="req">*</span></label><input id="educando2Nome" type="text" placeholder="Nome do educando"></div>
-              <div><label>Ano <span class="req">*</span></label><select id="educando2Ano"><option value="">Selecionar</option><option>Pré</option><option>1º Ano</option><option>2º Ano</option><option>3º Ano</option><option>4º Ano</option></select></div>
-              <div><label>Turma <span class="req">*</span></label><select id="educando2Turma" disabled><option value="">Selecione primeiro o ano</option></select></div>
-            </div>
-          </div>
-
-          <div id="educando3" class="educando-block" style="display:none;margin-top:24px;padding-top:22px;border-top:1px solid var(--line)">
-            <h3 style="color:var(--navy);margin:0 0 16px">Educando 3</h3>
-            <div class="grid">
-              <div class="full"><label>Nome do educando <span class="req">*</span></label><input id="educando3Nome" type="text" placeholder="Nome do educando"></div>
-              <div><label>Ano <span class="req">*</span></label><select id="educando3Ano"><option value="">Selecionar</option><option>Pré</option><option>1º Ano</option><option>2º Ano</option><option>3º Ano</option><option>4º Ano</option></select></div>
-              <div><label>Turma <span class="req">*</span></label><select id="educando3Turma" disabled><option value="">Selecione primeiro o ano</option></select></div>
-            </div>
-          </div>
-        </div>
-        <div class="panel">
-          <div class="section-title"><div class="section-icon">€</div><div><h2>Quota e pagamento</h2><p>Escolha o valor da quota e a forma de pagamento.</p></div></div>
-          <div class="grid">
-            <div class="full">
-              <label>Valor que pretende pagar (€) <span class="req">*</span></label>
-              <input id="valor" type="number" required min="10" step="1" value="10">
-              <div class="field-error" id="valueError">O valor mínimo da quota anual é 10 €.</div>
-            </div>
-            <div class="full">
-              <label>Forma de pagamento <span class="req">*</span></label>
-              <div class="choice-list">
-                <label class="choice"><input type="radio" name="pagamento" value="MBWay (9111111111)" required><div><strong>MB Way</strong><span>9111111111</span></div></label>
-                <label class="choice"><input type="radio" name="pagamento" value="IBAN: [colocar IBAN]"><div><strong>Transferência bancária</strong><span>IBAN: [colocar IBAN]</span></div></label>
-                <label class="choice"><input type="radio" name="pagamento" value="Dinheiro (A um membro da Associacao de Pais)"><div><strong>Dinheiro</strong><span>Entregar a um membro da Associação de Pais</span></div></label>
-              </div>
-            </div>
-          </div>
-          <div class="notice">Após efetuar a transferência, envie o comprovativo para <strong>[xxx@APEG.pt]</strong>.<br>No assunto indique: <strong>Quota de Associado – Nome do encarregado de educação – Nome do educando</strong>.</div>
-        </div>
-
-        <div class="panel">
-          <div class="section-title"><div class="section-icon">✓</div><div><h2>Consentimentos</h2><p>Confirme as autorizações necessárias para concluir a inscrição.</p></div></div>
-          <div class="choice-list">
-            <div>
-              <label>Tratamento de dados pessoais <span class="req">*</span></label>
-              <label class="choice"><input type="radio" name="rgpd" value="Sim" required><div><strong>Sim</strong><span>Autorizo o tratamento dos meus dados pessoais para efeitos de gestão de associados.</span></div></label>
-              <label class="choice"><input type="radio" name="rgpd" value="Não"><div><strong>Não</strong></div></label>
-            </div>
-            <div style="margin-top:18px">
-              <label>Comunicações da associação <span class="req">*</span></label>
-              <label class="choice"><input type="radio" name="comunicacoes" value="Sim" required><div><strong>Sim</strong><span>Autorizo o envio de comunicações por email e/ou telemóvel.</span></div></label>
-              <label class="choice"><input type="radio" name="comunicacoes" value="Não"><div><strong>Não</strong></div></label>
-            </div>
-          </div>
-        </div>
-
-        <div id="formError" class="error">Preencha corretamente os campos obrigatórios antes de continuar.</div>
-        <div class="actions">
-          <button type="button" class="btn-secondary" id="backBtn">← Voltar</button>
-          <button type="button" class="btn-primary" id="nextBtn">Continuar →</button>
-          <button type="submit" class="btn-primary" id="submitBtn" style="display:none">Concluir inscrição</button>
-        </div>
-      </form>
-    </div>
-
-    <div class="success" id="successBox">
-      <div class="big">🎉</div>
-      <h2>Inscrição registada!</h2>
-      <p>Obrigado por se juntar à APEG. A sua inscrição foi enviada com sucesso.</p>
-      <p>Se efetuou pagamento por transferência, não se esqueça de enviar o comprovativo para o email da associação.</p>
-    </div>
-  </section>
-</main>
-<footer>APEG — Associação de Pais da Escola da Giesta · Página de inscrição de associado</footer>
-
+<div class="row"><button type="button" id="back" class="secondary">← Voltar</button><button type="button" id="next" class="primary">Continuar →</button><button type="submit" id="submit" class="primary" style="display:none">Concluir inscrição</button></div>
+</form>
+<iframe name="hidden_iframe" id="hidden_iframe" style="display:none"></iframe>
+</div>
+</div>
 <script>
-  const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxgsJ7PRif3BN-104mGDiHd31LQonDWWM1afNl3HoWQwqSEo3hjFRwOnV3vDUYW_IWO8g/exec";
-
-  const panels=[...document.querySelectorAll('.panel')];
-  const steps=[...document.querySelectorAll('.step')];
-  const nextBtn=document.getElementById('nextBtn'), backBtn=document.getElementById('backBtn'),
-        submitBtn=document.getElementById('submitBtn'), progressBar=document.getElementById('progressBar'),
-        errorBox=document.getElementById('formError'), form=document.getElementById('apegForm');
-  const email=document.getElementById('email'), phone=document.getElementById('telemovel'),
-        nif=document.getElementById('nif'), valor=document.getElementById('valor');
-  let current=0;
-
-  function onlyDigits(el){ el.value = el.value.replace(/\D/g,''); }
-  phone.addEventListener('input',()=>onlyDigits(phone));
-  nif.addEventListener('input',()=>onlyDigits(nif));
-
-  function configureTurma(anoEl,turmaEl){
-    anoEl.addEventListener('change',()=>{
-      turmaEl.innerHTML='<option value="">Selecionar</option>';
-      let opts=[];
-      if(anoEl.value==='Pré') opts=[['Sala 6','Sala 6'],['Sala 7','Sala 7']];
-      else if(anoEl.value) opts=[['D','Turma D'],['E','Turma E']];
-      opts.forEach(([value,label])=>{ const op=document.createElement('option'); op.value=value; op.textContent=label; turmaEl.appendChild(op); });
-      turmaEl.disabled=!anoEl.value; turmaEl.value='';
-    });
-  }
-  for(let i=1;i<=3;i++) configureTurma(document.getElementById(`educando${i}Ano`), document.getElementById(`educando${i}Turma`));
-
-  function setEducandos(qtd){
-    for(let i=1;i<=3;i++){
-      const block=document.getElementById(`educando${i}`);
-      const active=i<=qtd;
-      block.style.display=active?'block':'none';
-      ['Nome','Ano','Turma'].forEach(s=>{
-        const el=document.getElementById(`educando${i}${s}`);
-        if(el){ el.required=active; if(!active){ el.value=''; if(s==='Turma') el.disabled=true; } }
-      });
-    }
-  }
-  document.querySelectorAll('input[name="numEducandos"]').forEach(r=>r.addEventListener('change',()=>setEducandos(Number(r.value))));
-
-  function validEmail(v){ return /^[^\s@]+@[^\s@]+\.[A-Za-z]{2,}$/.test(v.trim()); }
-  function setErr(el,id,on){ el.classList.toggle('invalid',on); document.getElementById(id)?.classList.toggle('show',on); }
-  function validateCustom(){
-    let ok=true;
-    if(email.closest('.panel').classList.contains('active')){
-      const bad=!validEmail(email.value); setErr(email,'emailError',bad); if(bad) ok=false;
-      const pbad=!/^\d{9}$/.test(phone.value); setErr(phone,'phoneError',pbad); if(pbad) ok=false;
-      const nbad=nif.value!=='' && !/^\d{9}$/.test(nif.value); setErr(nif,'nifError',nbad); if(nbad) ok=false;
-    }
-    if(valor.closest('.panel').classList.contains('active')){
-      const vbad=Number(valor.value)<10; setErr(valor,'valueError',vbad); if(vbad) ok=false;
-    }
-    return ok;
-  }
-  function validatePanel(){
-    errorBox.style.display='none';
-    let ok=validateCustom();
-    const fields=[...panels[current].querySelectorAll('input,select')].filter(el=>el.offsetParent!==null);
-    const radioNames=new Set();
-    fields.forEach(f=>{
-      if(f.type==='radio'){radioNames.add(f.name);return;}
-      if(f.required && !f.value){f.classList.add('invalid');ok=false;} else if(!f.classList.contains('invalid')) f.classList.remove('invalid');
-    });
-    radioNames.forEach(name=>{
-      const group=[...panels[current].querySelectorAll(`input[type="radio"][name="${name}"]`)].filter(r=>r.offsetParent!==null);
-      if(group.some(r=>r.required) && !group.some(r=>r.checked)) ok=false;
-    });
-    if(!ok) errorBox.style.display='block';
-    return ok;
-  }
-  function updateUI(){
-    panels.forEach((p,i)=>p.classList.toggle('active',i===current));
-    steps.forEach((s,i)=>{s.classList.toggle('active',i===current);s.classList.toggle('done',i<current)});
-    progressBar.style.width=((current+1)/panels.length*100)+'%';
-    backBtn.style.visibility=current===0?'hidden':'visible';
-    nextBtn.style.display=current===panels.length-1?'none':'inline-block';
-    submitBtn.style.display=current===panels.length-1?'inline-block':'none';
-    errorBox.style.display='none';
-    window.scrollTo({top:0,behavior:'smooth'});
-  }
-  nextBtn.addEventListener('click',()=>{if(validatePanel()){current++;updateUI()}});
-  backBtn.addEventListener('click',()=>{if(current>0){current--;updateUI()}});
-
-  form.addEventListener('submit', async (e)=>{
-    e.preventDefault();
-    if(!validatePanel()) return;
-    const numEducandos=Number(document.querySelector('input[name="numEducandos"]:checked')?.value || 0);
-    if(!numEducandos){ errorBox.textContent='Indique o número de educandos.'; errorBox.style.display='block'; return; }
-    const payload={
-      email:email.value.trim(), nome:document.getElementById('nome').value.trim(), telemovel:phone.value.trim(), nif:nif.value.trim(),
-      numEducandos,
-      educandos:[],
-      valor:valor.value,
-      pagamento:document.querySelector('input[name="pagamento"]:checked')?.value || '',
-      rgpd:document.querySelector('input[name="rgpd"]:checked')?.value || '',
-      comunicacoes:document.querySelector('input[name="comunicacoes"]:checked')?.value || ''
-    };
-    for(let i=1;i<=numEducandos;i++) payload.educandos.push({
-      nome:document.getElementById(`educando${i}Nome`).value.trim(),
-      ano:document.getElementById(`educando${i}Ano`).value,
-      turma:document.getElementById(`educando${i}Turma`).value
-    });
-
-    submitBtn.disabled=true; submitBtn.textContent='A enviar...'; errorBox.style.display='none';
-    try{
-      const res=await fetch(APPS_SCRIPT_URL,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(payload)});
-      const txt=await res.text(); let data={}; try{data=JSON.parse(txt)}catch(_){}
-      if(!res.ok || data.ok===false) throw new Error(data.error || 'Falha no envio');
-      document.getElementById('formCard').style.display='none';
-      document.getElementById('successBox').style.display='block';
-      window.scrollTo({top:0,behavior:'smooth'});
-    }catch(err){
-      errorBox.textContent='Não foi possível concluir a inscrição. Tente novamente ou contacte a APEG.';
-      errorBox.style.display='block'; submitBtn.disabled=false; submitBtn.textContent='Concluir inscrição'; console.error(err);
-    }
-  });
-  updateUI();
+const steps=[...document.querySelectorAll('.step')]; let current=0, submitted=false;
+const back=document.getElementById('back'),next=document.getElementById('next'),submit=document.getElementById('submit');
+function digits(el){el.value=el.value.replace(/\D/g,'')} tel.oninput=()=>digits(tel); nif.oninput=()=>digits(nif);
+function setupTurma(i){
+ const ano=document.getElementById('ano'+i), turma=document.getElementById('turma'+i);
+ turma.innerHTML='<option value="">Selecionar</option>';
+ let opts=ano.value==='Pré'?[['Sala 6','Sala 6'],['Sala 7','Sala 7']]:ano.value?[['D','Turma D'],['E','Turma E']]:[];
+ opts.forEach(([v,t])=>{let o=document.createElement('option');o.value=v;o.textContent=t;turma.appendChild(o)});
+ turma.disabled=!ano.value;
+}
+[1,2,3].forEach(i=>document.getElementById('ano'+i).onchange=()=>setupTurma(i));
+numEducandos.onchange=()=>{
+ const n=Number(numEducandos.value||0);
+ [1,2,3].forEach(i=>{
+  const active=i<=n; document.getElementById('kid'+i).classList.toggle('hidden',!active);
+  ['educando','ano','turma'].forEach(p=>{const el=document.getElementById(p+i);el.required=active;if(!active){el.value='';if(p==='turma')el.disabled=true;}});
+ });
+};
+function valid(){
+ let ok=true;
+ if(current===0){
+  const ev=/^[^\s@]+@[^\s@]+\.[A-Za-z]{2,}$/.test(email.value.trim()); emailErr.style.display=ev?'none':'block'; if(!ev)ok=false;
+  const tv=/^\d{9}$/.test(tel.value); telErr.style.display=tv?'none':'block'; if(!tv)ok=false;
+  const nv=!nif.value||/^\d{9}$/.test(nif.value); nifErr.style.display=nv?'none':'block'; if(!nv)ok=false;
+ }
+ if(current===2){const vv=Number(valor.value)>=10;valorErr.style.display=vv?'none':'block';if(!vv)ok=false;}
+ steps[current].querySelectorAll('[required]').forEach(el=>{if(el.type==='radio')return;if(!el.value)ok=false;});
+ const names=[...new Set([...steps[current].querySelectorAll('input[type=radio][required]')].map(x=>x.name))];
+ names.forEach(n=>{if(!steps[current].querySelector('input[name="'+n+'"]:checked'))ok=false;});
+ return ok;
+}
+function render(){steps.forEach((s,i)=>s.classList.toggle('active',i===current));back.style.visibility=current===0?'hidden':'visible';next.style.display=current===steps.length-1?'none':'inline-block';submit.style.display=current===steps.length-1?'inline-block':'none';}
+next.onclick=()=>{if(valid()){current++;render()}};back.onclick=()=>{if(current>0){current--;render()}};
+form.onsubmit=e=>{if(!valid()){e.preventDefault();return}submitted=true;submit.disabled=true;submit.textContent='A enviar...';};
+hidden_iframe.onload=()=>{if(submitted){document.body.innerHTML='<div style="font-family:Arial;padding:40px;text-align:center"><h1>Inscrição registada com sucesso</h1><p>Obrigado por se juntar à APEG.</p></div>';}};
+render();
 </script>
-</body>
-</html>
+</body></html>
