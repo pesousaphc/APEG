@@ -83,27 +83,27 @@
       </div>
       <div class="progress"><span id="progressBar"></span></div>
 
-      <form id="apegForm" action="https://script.google.com/macros/s/AKfycbxr4tIuOs8IiZZkWLUgpEe5K3YarUW4xXZx59kmJPAvK6Td-_Sgq3aVvQPPhfna1muLKA/exec" method="POST" target="appsScriptFrame" novalidate>
+      <form id="apegForm" novalidate>
         <div class="panel active">
           <div class="section-title"><div class="section-icon">👤</div><div><h2>Dados pessoais</h2><p>Preencha os seus dados para efetuar a inscrição como associado.</p></div></div>
           <div class="grid">
             <div class="full">
               <label>Email <span class="req">*</span></label>
-              <input id="email" name="email" type="email" required placeholder="exemplo@email.com" autocomplete="email">
+              <input id="email" type="email" required placeholder="exemplo@email.com" autocomplete="email">
               <div class="field-error" id="emailError">Introduza um email válido, por exemplo nome@dominio.pt.</div>
             </div>
             <div class="full">
               <label>Nome completo <span class="req">*</span></label>
-              <input id="nome" name="nome" type="text" required placeholder="O seu nome completo" autocomplete="name">
+              <input id="nome" type="text" required placeholder="O seu nome completo" autocomplete="name">
             </div>
             <div>
               <label>Telemóvel <span class="req">*</span></label>
-              <input id="telemovel" name="telemovel" type="tel" inputmode="numeric" pattern="[0-9]{9}" maxlength="9" required placeholder="912345678" autocomplete="tel">
+              <input id="telemovel" type="tel" inputmode="numeric" pattern="[0-9]{9}" maxlength="9" required placeholder="912345678" autocomplete="tel">
               <div class="field-error" id="phoneError">Introduza 9 algarismos, sem letras ou símbolos.</div>
             </div>
             <div>
               <label>NIF</label>
-              <input id="nif" name="nif" type="text" inputmode="numeric" pattern="[0-9]{9}" maxlength="9" placeholder="Opcional">
+              <input id="nif" type="text" inputmode="numeric" pattern="[0-9]{9}" maxlength="9" placeholder="Opcional">
               <div class="field-error" id="nifError">O NIF deve conter 9 algarismos.</div>
             </div>
           </div>
@@ -124,27 +124,27 @@
           <div id="educando1" class="educando-block" style="display:none">
             <h3 style="color:var(--navy);margin:10px 0 16px">Educando 1</h3>
             <div class="grid">
-              <div class="full"><label>Nome do educando <span class="req">*</span></label><input id="educando1Nome" name="educando1" type="text" placeholder="Nome do educando"></div>
-              <div><label>Ano <span class="req">*</span></label><select id="educando1Ano" name="ano1"><option value="">Selecionar</option><option>Pré</option><option>1º Ano</option><option>2º Ano</option><option>3º Ano</option><option>4º Ano</option></select></div>
-              <div><label>Turma <span class="req">*</span></label><select id="educando1Turma" name="turma1" disabled><option value="">Selecione primeiro o ano</option></select></div>
+              <div class="full"><label>Nome do educando <span class="req">*</span></label><input id="educando1Nome" type="text" placeholder="Nome do educando"></div>
+              <div><label>Ano <span class="req">*</span></label><select id="educando1Ano"><option value="">Selecionar</option><option>Pré</option><option>1º Ano</option><option>2º Ano</option><option>3º Ano</option><option>4º Ano</option></select></div>
+              <div><label>Turma <span class="req">*</span></label><select id="educando1Turma" disabled><option value="">Selecione primeiro o ano</option></select></div>
             </div>
           </div>
 
           <div id="educando2" class="educando-block" style="display:none;margin-top:24px;padding-top:22px;border-top:1px solid var(--line)">
             <h3 style="color:var(--navy);margin:0 0 16px">Educando 2</h3>
             <div class="grid">
-              <div class="full"><label>Nome do educando <span class="req">*</span></label><input id="educando2Nome" name="educando2" type="text" placeholder="Nome do educando"></div>
-              <div><label>Ano <span class="req">*</span></label><select id="educando2Ano" name="ano2"><option value="">Selecionar</option><option>Pré</option><option>1º Ano</option><option>2º Ano</option><option>3º Ano</option><option>4º Ano</option></select></div>
-              <div><label>Turma <span class="req">*</span></label><select id="educando2Turma" name="turma2" disabled><option value="">Selecione primeiro o ano</option></select></div>
+              <div class="full"><label>Nome do educando <span class="req">*</span></label><input id="educando2Nome" type="text" placeholder="Nome do educando"></div>
+              <div><label>Ano <span class="req">*</span></label><select id="educando2Ano"><option value="">Selecionar</option><option>Pré</option><option>1º Ano</option><option>2º Ano</option><option>3º Ano</option><option>4º Ano</option></select></div>
+              <div><label>Turma <span class="req">*</span></label><select id="educando2Turma" disabled><option value="">Selecione primeiro o ano</option></select></div>
             </div>
           </div>
 
           <div id="educando3" class="educando-block" style="display:none;margin-top:24px;padding-top:22px;border-top:1px solid var(--line)">
             <h3 style="color:var(--navy);margin:0 0 16px">Educando 3</h3>
             <div class="grid">
-              <div class="full"><label>Nome do educando <span class="req">*</span></label><input id="educando3Nome" name="educando3" type="text" placeholder="Nome do educando"></div>
-              <div><label>Ano <span class="req">*</span></label><select id="educando3Ano" name="ano3"><option value="">Selecionar</option><option>Pré</option><option>1º Ano</option><option>2º Ano</option><option>3º Ano</option><option>4º Ano</option></select></div>
-              <div><label>Turma <span class="req">*</span></label><select id="educando3Turma" name="turma3" disabled><option value="">Selecione primeiro o ano</option></select></div>
+              <div class="full"><label>Nome do educando <span class="req">*</span></label><input id="educando3Nome" type="text" placeholder="Nome do educando"></div>
+              <div><label>Ano <span class="req">*</span></label><select id="educando3Ano"><option value="">Selecionar</option><option>Pré</option><option>1º Ano</option><option>2º Ano</option><option>3º Ano</option><option>4º Ano</option></select></div>
+              <div><label>Turma <span class="req">*</span></label><select id="educando3Turma" disabled><option value="">Selecione primeiro o ano</option></select></div>
             </div>
           </div>
         </div>
@@ -153,7 +153,7 @@
           <div class="grid">
             <div class="full">
               <label>Valor que pretende pagar (€) <span class="req">*</span></label>
-              <input id="valor" name="valor" type="number" required min="10" step="1" value="10">
+              <input id="valor" type="number" required min="10" step="1" value="10">
               <div class="field-error" id="valueError">O valor mínimo da quota anual é 10 €.</div>
             </div>
             <div class="full">
@@ -191,7 +191,7 @@
           <button type="submit" class="btn-primary" id="submitBtn" style="display:none">Concluir inscrição</button>
         </div>
       </form>
-<iframe name="appsScriptFrame" id="appsScriptFrame" style="display:none"></iframe>
+<iframe id="appsScriptFrame" name="appsScriptFrame" style="display:none"></iframe>
     </div>
 
     <div class="success" id="successBox">
@@ -205,7 +205,9 @@
 <footer>APEG — Associação de Pais da Escola da Giesta · Página de inscrição de associado</footer>
 
 <script>
-const panels=[...document.querySelectorAll('.panel')];
+  const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxr4tIuOs8IiZZkWLUgpEe5K3YarUW4xXZx59kmJPAvK6Td-_Sgq3aVvQPPhfna1muLKA/exec";
+
+  const panels=[...document.querySelectorAll('.panel')];
   const steps=[...document.querySelectorAll('.step')];
   const nextBtn=document.getElementById('nextBtn'), backBtn=document.getElementById('backBtn'),
         submitBtn=document.getElementById('submitBtn'), progressBar=document.getElementById('progressBar'),
@@ -286,43 +288,73 @@ const panels=[...document.querySelectorAll('.panel')];
   nextBtn.addEventListener('click',()=>{if(validatePanel()){current++;updateUI()}});
   backBtn.addEventListener('click',()=>{if(current>0){current--;updateUI()}});
 
-  let envioIniciado = false;
   const appsFrame = document.getElementById('appsScriptFrame');
+  let envioTimeout = null;
+
+  window.addEventListener('message', (event)=>{
+    if(event.origin !== 'https://script.google.com' && event.origin !== 'https://script.googleusercontent.com') return;
+    const data = event.data || {};
+    if(data.source !== 'APEG') return;
+
+    clearTimeout(envioTimeout);
+
+    if(data.ok){
+      document.getElementById('formCard').style.display='none';
+      document.getElementById('successBox').style.display='block';
+      window.scrollTo({top:0,behavior:'smooth'});
+    }else{
+      errorBox.textContent='Não foi possível concluir a inscrição: ' + (data.error || 'erro não identificado') + ' [Ref. ' + (data.trace || '-') + ']';
+      errorBox.style.display='block';
+      submitBtn.disabled=false;
+      submitBtn.textContent='Concluir inscrição';
+    }
+  });
 
   form.addEventListener('submit', (e)=>{
     e.preventDefault();
-
     if(!validatePanel()) return;
 
-    const numEducandos = Number(
-      document.querySelector('input[name="numEducandos"]:checked')?.value || 0
-    );
-
+    const numEducandos=Number(document.querySelector('input[name="numEducandos"]:checked')?.value || 0);
     if(!numEducandos){
       errorBox.textContent='Indique o número de educandos.';
       errorBox.style.display='block';
       return;
     }
 
-    // Os inputs visíveis têm agora "name", por isso o browser envia-os
-    // diretamente como application/x-www-form-urlencoded.
-    // O Apps Script recebe-os em e.parameter.
-    submitBtn.disabled = true;
-    submitBtn.textContent = 'A enviar...';
-    errorBox.style.display = 'none';
-    envioIniciado = true;
+    const payload={
+      email:email.value.trim(),
+      nome:document.getElementById('nome').value.trim(),
+      telemovel:phone.value.trim(),
+      nif:nif.value.trim(),
+      numEducandos:numEducandos,
+      educandos:[],
+      valor:valor.value,
+      pagamento:document.querySelector('input[name="pagamento"]:checked')?.value || '',
+      rgpd:document.querySelector('input[name="rgpd"]:checked')?.value || '',
+      comunicacoes:document.querySelector('input[name="comunicacoes"]:checked')?.value || ''
+    };
 
-    HTMLFormElement.prototype.submit.call(form);
-  });
+    for(let i=1;i<=numEducandos;i++){
+      payload.educandos.push({
+        nome:document.getElementById(`educando${i}Nome`).value.trim(),
+        ano:document.getElementById(`educando${i}Ano`).value,
+        turma:document.getElementById(`educando${i}Turma`).value
+      });
+    }
 
-  appsFrame.addEventListener('load', ()=>{
-    if(!envioIniciado) return;
+    submitBtn.disabled=true;
+    submitBtn.textContent='A enviar...';
+    errorBox.style.display='none';
 
-    // O carregamento do iframe confirma que o Apps Script recebeu e respondeu
-    // ao POST. O Code.gs atual é responsável por validar e gravar no Google Forms.
-    document.getElementById('formCard').style.display='none';
-    document.getElementById('successBox').style.display='block';
-    window.scrollTo({top:0,behavior:'smooth'});
+    const encoded = encodeURIComponent(JSON.stringify(payload));
+    appsFrame.src = APPS_SCRIPT_URL + '?payload=' + encoded + '&_=' + Date.now();
+
+    envioTimeout=setTimeout(()=>{
+      errorBox.textContent='O Google Apps Script não confirmou a gravação em 20 segundos. Consulte Apps Script > Execuções.';
+      errorBox.style.display='block';
+      submitBtn.disabled=false;
+      submitBtn.textContent='Concluir inscrição';
+    },20000);
   });
 
   updateUI();
