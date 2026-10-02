@@ -83,27 +83,27 @@
       </div>
       <div class="progress"><span id="progressBar"></span></div>
 
-      <form id="apegForm" novalidate>
+      <form id="apegForm" action="https://docs.google.com/forms/d/e/1FAIpQLSfvE6RBYS3lQjzn7jFIvS0D6CxyKBxCUYjrH2aoDaMUs-Rtrg/formResponse" method="POST" target="googleFormsFrame" novalidate>
         <div class="panel active">
           <div class="section-title"><div class="section-icon">👤</div><div><h2>Dados pessoais</h2><p>Preencha os seus dados para efetuar a inscrição como associado.</p></div></div>
           <div class="grid">
             <div class="full">
               <label>Email <span class="req">*</span></label>
-              <input id="email" type="email" required placeholder="exemplo@email.com" autocomplete="email">
+              <input id="email" name="entry.1768733702" type="email" required placeholder="exemplo@email.com" autocomplete="email">
               <div class="field-error" id="emailError">Introduza um email válido, por exemplo nome@dominio.pt.</div>
             </div>
             <div class="full">
               <label>Nome completo <span class="req">*</span></label>
-              <input id="nome" type="text" required placeholder="O seu nome completo" autocomplete="name">
+              <input id="nome" name="entry.1570699673" type="text" required placeholder="O seu nome completo" autocomplete="name">
             </div>
             <div>
               <label>Telemóvel <span class="req">*</span></label>
-              <input id="telemovel" type="tel" inputmode="numeric" pattern="[0-9]{9}" maxlength="9" required placeholder="912345678" autocomplete="tel">
+              <input id="telemovel" name="entry.1244337446" type="tel" inputmode="numeric" pattern="[0-9]{9}" maxlength="9" required placeholder="912345678" autocomplete="tel">
               <div class="field-error" id="phoneError">Introduza 9 algarismos, sem letras ou símbolos.</div>
             </div>
             <div>
               <label>NIF</label>
-              <input id="nif" type="text" inputmode="numeric" pattern="[0-9]{9}" maxlength="9" placeholder="Opcional">
+              <input id="nif" name="entry.1411622296" type="text" inputmode="numeric" pattern="[0-9]{9}" maxlength="9" placeholder="Opcional">
               <div class="field-error" id="nifError">O NIF deve conter 9 algarismos.</div>
             </div>
           </div>
@@ -115,36 +115,36 @@
           <div class="full" style="margin-bottom:20px">
             <label>Número de educandos <span class="req">*</span></label>
             <div class="choice-list" style="grid-template-columns:repeat(3,1fr)">
-              <label class="choice"><input type="radio" name="numEducandos" value="1" required><div><strong>1 educando</strong></div></label>
-              <label class="choice"><input type="radio" name="numEducandos" value="2"><div><strong>2 educandos</strong></div></label>
-              <label class="choice"><input type="radio" name="numEducandos" value="3"><div><strong>3 educandos</strong></div></label>
+              <label class="choice"><input type="radio" name="entry.723669802" data-role="numEducandos" value="1" required><div><strong>1 educando</strong></div></label>
+              <label class="choice"><input type="radio" name="entry.723669802" data-role="numEducandos" value="2"><div><strong>2 educandos</strong></div></label>
+              <label class="choice"><input type="radio" name="entry.723669802" data-role="numEducandos" value="3"><div><strong>3 educandos</strong></div></label>
             </div>
           </div>
 
           <div id="educando1" class="educando-block" style="display:none">
             <h3 style="color:var(--navy);margin:10px 0 16px">Educando 1</h3>
             <div class="grid">
-              <div class="full"><label>Nome do educando <span class="req">*</span></label><input id="educando1Nome" type="text" placeholder="Nome do educando"></div>
-              <div><label>Ano <span class="req">*</span></label><select id="educando1Ano"><option value="">Selecionar</option><option>Pré</option><option>1º Ano</option><option>2º Ano</option><option>3º Ano</option><option>4º Ano</option></select></div>
-              <div><label>Turma <span class="req">*</span></label><select id="educando1Turma" disabled><option value="">Selecione primeiro o ano</option></select></div>
+              <div class="full"><label>Nome do educando <span class="req">*</span></label><input id="educando1Nome" name="entry.1755417473" type="text" placeholder="Nome do educando"></div>
+              <div><label>Ano <span class="req">*</span></label><select id="educando1Ano" name="entry.736919914"><option value="">Selecionar</option><option>Pré</option><option>1º Ano</option><option>2º Ano</option><option>3º Ano</option><option>4º Ano</option></select></div>
+              <div><label>Turma <span class="req">*</span></label><select id="educando1Turma" name="entry.518484864" disabled><option value="">Selecione primeiro o ano</option></select></div>
             </div>
           </div>
 
           <div id="educando2" class="educando-block" style="display:none;margin-top:24px;padding-top:22px;border-top:1px solid var(--line)">
             <h3 style="color:var(--navy);margin:0 0 16px">Educando 2</h3>
             <div class="grid">
-              <div class="full"><label>Nome do educando <span class="req">*</span></label><input id="educando2Nome" type="text" placeholder="Nome do educando"></div>
-              <div><label>Ano <span class="req">*</span></label><select id="educando2Ano"><option value="">Selecionar</option><option>Pré</option><option>1º Ano</option><option>2º Ano</option><option>3º Ano</option><option>4º Ano</option></select></div>
-              <div><label>Turma <span class="req">*</span></label><select id="educando2Turma" disabled><option value="">Selecione primeiro o ano</option></select></div>
+              <div class="full"><label>Nome do educando <span class="req">*</span></label><input id="educando2Nome" name="entry.1685376556" type="text" placeholder="Nome do educando"></div>
+              <div><label>Ano <span class="req">*</span></label><select id="educando2Ano" name="entry.541006440"><option value="">Selecionar</option><option>Pré</option><option>1º Ano</option><option>2º Ano</option><option>3º Ano</option><option>4º Ano</option></select></div>
+              <div><label>Turma <span class="req">*</span></label><select id="educando2Turma" name="entry.2009031389" disabled><option value="">Selecione primeiro o ano</option></select></div>
             </div>
           </div>
 
           <div id="educando3" class="educando-block" style="display:none;margin-top:24px;padding-top:22px;border-top:1px solid var(--line)">
             <h3 style="color:var(--navy);margin:0 0 16px">Educando 3</h3>
             <div class="grid">
-              <div class="full"><label>Nome do educando <span class="req">*</span></label><input id="educando3Nome" type="text" placeholder="Nome do educando"></div>
-              <div><label>Ano <span class="req">*</span></label><select id="educando3Ano"><option value="">Selecionar</option><option>Pré</option><option>1º Ano</option><option>2º Ano</option><option>3º Ano</option><option>4º Ano</option></select></div>
-              <div><label>Turma <span class="req">*</span></label><select id="educando3Turma" disabled><option value="">Selecione primeiro o ano</option></select></div>
+              <div class="full"><label>Nome do educando <span class="req">*</span></label><input id="educando3Nome" name="entry.1237589067" type="text" placeholder="Nome do educando"></div>
+              <div><label>Ano <span class="req">*</span></label><select id="educando3Ano" name="entry.1595026281"><option value="">Selecionar</option><option>Pré</option><option>1º Ano</option><option>2º Ano</option><option>3º Ano</option><option>4º Ano</option></select></div>
+              <div><label>Turma <span class="req">*</span></label><select id="educando3Turma" name="entry.729894871" disabled><option value="">Selecione primeiro o ano</option></select></div>
             </div>
           </div>
         </div>
@@ -153,15 +153,15 @@
           <div class="grid">
             <div class="full">
               <label>Valor que pretende pagar (€) <span class="req">*</span></label>
-              <input id="valor" type="number" required min="10" step="1" value="10">
+              <input id="valor" name="entry.1815716533" type="number" required min="10" step="1" value="10">
               <div class="field-error" id="valueError">O valor mínimo da quota anual é 10 €.</div>
             </div>
             <div class="full">
               <label>Forma de pagamento <span class="req">*</span></label>
               <div class="choice-list">
-                <label class="choice"><input type="radio" name="pagamento" value="MBWay (9111111111)" required><div><strong>MB Way</strong><span>9111111111</span></div></label>
-                <label class="choice"><input type="radio" name="pagamento" value="IBAN: PT50 0033 0000 4548 4837 6450 5"><div><strong>Transferência bancária</strong><span>IBAN: PT50 0033 0000 4548 4837 6450 5</span></div></label>
-                <label class="choice"><input type="radio" name="pagamento" value="Dinheiro (A um membro da Associacao de Pais)"><div><strong>Dinheiro</strong><span>Entregar a um membro da Associação de Pais</span></div></label>
+                <label class="choice"><input type="radio" name="entry.1330716454" data-role="pagamento" value="MBWay (9111111111)" required><div><strong>MB Way</strong><span>9111111111</span></div></label>
+                <label class="choice"><input type="radio" name="entry.1330716454" data-role="pagamento" value="IBAN: [PT50 0033 0000 4548 4837 6450 5]"><div><strong>Transferência bancária</strong><span>IBAN: PT50 0033 0000 4548 4837 6450 5</span></div></label>
+                <label class="choice"><input type="radio" name="entry.1330716454" data-role="pagamento" value="Dinheiro (A um membro da Associacao de Pais)"><div><strong>Dinheiro</strong><span>Entregar a um membro da Associação de Pais</span></div></label>
               </div>
             </div>
           </div>
@@ -173,13 +173,13 @@
           <div class="choice-list">
             <div>
               <label>Tratamento de dados pessoais <span class="req">*</span></label>
-              <label class="choice"><input type="radio" name="rgpd" value="Sim" required><div><strong>Sim</strong><span>Autorizo o tratamento dos meus dados pessoais para efeitos de gestão de associados.</span></div></label>
-              <label class="choice"><input type="radio" name="rgpd" value="Não"><div><strong>Não</strong></div></label>
+              <label class="choice"><input type="radio" name="entry.1247948507" data-role="rgpd" value="Sim" required><div><strong>Sim</strong><span>Autorizo o tratamento dos meus dados pessoais para efeitos de gestão de associados.</span></div></label>
+              <label class="choice"><input type="radio" name="entry.1247948507" data-role="rgpd" value="Não"><div><strong>Não</strong></div></label>
             </div>
             <div style="margin-top:18px">
               <label>Comunicações da associação <span class="req">*</span></label>
-              <label class="choice"><input type="radio" name="comunicacoes" value="Sim" required><div><strong>Sim</strong><span>Autorizo o envio de comunicações por email e/ou telemóvel.</span></div></label>
-              <label class="choice"><input type="radio" name="comunicacoes" value="Não"><div><strong>Não</strong></div></label>
+              <label class="choice"><input type="radio" name="entry.690308625" data-role="comunicacoes" value="Sim" required><div><strong>Sim</strong><span>Autorizo o envio de comunicações por email e/ou telemóvel.</span></div></label>
+              <label class="choice"><input type="radio" name="entry.690308625" data-role="comunicacoes" value="Não"><div><strong>Não</strong></div></label>
             </div>
           </div>
         </div>
@@ -191,6 +191,7 @@
           <button type="submit" class="btn-primary" id="submitBtn" style="display:none">Concluir inscrição</button>
         </div>
       </form>
+<iframe name="googleFormsFrame" id="googleFormsFrame" style="display:none"></iframe>
     </div>
 
     <div class="success" id="successBox">
@@ -204,9 +205,7 @@
 <footer>APEG — Associação de Pais da Escola da Giesta · Página de inscrição de associado</footer>
 
 <script>
-  const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxr4tIuOs8IiZZkWLUgpEe5K3YarUW4xXZx59kmJPAvK6Td-_Sgq3aVvQPPhfna1muLKA/exec";
-
-  const panels=[...document.querySelectorAll('.panel')];
+const panels=[...document.querySelectorAll('.panel')];
   const steps=[...document.querySelectorAll('.step')];
   const nextBtn=document.getElementById('nextBtn'), backBtn=document.getElementById('backBtn'),
         submitBtn=document.getElementById('submitBtn'), progressBar=document.getElementById('progressBar'),
@@ -242,7 +241,7 @@
       });
     }
   }
-  document.querySelectorAll('input[name="numEducandos"]').forEach(r=>r.addEventListener('change',()=>setEducandos(Number(r.value))));
+  document.querySelectorAll('input[data-role="numEducandos"]').forEach(r=>r.addEventListener('change',()=>setEducandos(Number(r.value))));
 
   function validEmail(v){ return /^[^\s@]+@[^\s@]+\.[A-Za-z]{2,}$/.test(v.trim()); }
   function setErr(el,id,on){ el.classList.toggle('invalid',on); document.getElementById(id)?.classList.toggle('show',on); }
@@ -287,96 +286,48 @@
   nextBtn.addEventListener('click',()=>{if(validatePanel()){current++;updateUI()}});
   backBtn.addEventListener('click',()=>{if(current>0){current--;updateUI()}});
 
-  let envioTimeout = null;
-  let jsonpScript = null;
+  let envioIniciado=false;
+  const googleFormsFrame=document.getElementById('googleFormsFrame');
 
-  window.apegReceive = function(data){
-    clearTimeout(envioTimeout);
-    if(jsonpScript){
-      jsonpScript.remove();
-      jsonpScript = null;
-    }
-
-    if(data && data.ok){
-      document.getElementById('formCard').style.display='none';
-      document.getElementById('successBox').style.display='block';
-      window.scrollTo({top:0,behavior:'smooth'});
-    }else{
-      const detalhe = data && data.error ? data.error : 'Erro não identificado no Apps Script.';
-      const ref = data && data.trace ? ' [Ref. ' + data.trace + ']' : '';
-      errorBox.textContent='Não foi possível concluir a inscrição: ' + detalhe + ref;
-      errorBox.style.display='block';
-      submitBtn.disabled=false;
-      submitBtn.textContent='Concluir inscrição';
-    }
-  };
-
-  form.addEventListener('submit', (e)=>{
+  form.addEventListener('submit',(e)=>{
     e.preventDefault();
     if(!validatePanel()) return;
 
-    const numEducandos=Number(document.querySelector('input[name="numEducandos"]:checked')?.value || 0);
+    const numEducandos=Number(
+      document.querySelector('input[data-role="numEducandos"]:checked')?.value || 0
+    );
+
     if(!numEducandos){
       errorBox.textContent='Indique o número de educandos.';
       errorBox.style.display='block';
       return;
     }
 
-    const payload={
-      email:email.value.trim(),
-      nome:document.getElementById('nome').value.trim(),
-      telemovel:phone.value.trim(),
-      nif:nif.value.trim(),
-      numEducandos:numEducandos,
-      educandos:[],
-      valor:valor.value,
-      pagamento:document.querySelector('input[name="pagamento"]:checked')?.value || '',
-      rgpd:document.querySelector('input[name="rgpd"]:checked')?.value || '',
-      comunicacoes:document.querySelector('input[name="comunicacoes"]:checked')?.value || ''
-    };
-
-    for(let i=1;i<=numEducandos;i++){
-      payload.educandos.push({
-        nome:document.getElementById(`educando${i}Nome`).value.trim(),
-        ano:document.getElementById(`educando${i}Ano`).value,
-        turma:document.getElementById(`educando${i}Turma`).value
+    // Não enviar os campos dos educandos que não foram selecionados.
+    for(let i=1;i<=3;i++){
+      const active=i<=numEducandos;
+      ['Nome','Ano','Turma'].forEach(s=>{
+        const el=document.getElementById(`educando${i}${s}`);
+        if(el) el.disabled=!active;
       });
     }
 
+    envioIniciado=true;
     submitBtn.disabled=true;
     submitBtn.textContent='A enviar...';
     errorBox.style.display='none';
 
-    // JSONP: carrega uma resposta JavaScript do Apps Script.
-    // Um <script src="..."> pode atravessar domínios sem CORS, ao contrário de fetch/iframe.
-    if(jsonpScript) jsonpScript.remove();
-    jsonpScript=document.createElement('script');
-    jsonpScript.async=true;
-    jsonpScript.src=APPS_SCRIPT_URL
-      + '?callback=apegReceive'
-      + '&payload=' + encodeURIComponent(JSON.stringify(payload))
-      + '&_=' + Date.now();
+    // POST direto para Google Forms, sem Apps Script.
+    HTMLFormElement.prototype.submit.call(form);
+  });
 
-    jsonpScript.onerror=()=>{
-      clearTimeout(envioTimeout);
-      errorBox.textContent='Não foi possível contactar o Google Apps Script. Verifique a implementação Web App e tente novamente.';
-      errorBox.style.display='block';
-      submitBtn.disabled=false;
-      submitBtn.textContent='Concluir inscrição';
-    };
+  googleFormsFrame.addEventListener('load',()=>{
+    if(!envioIniciado) return;
 
-    document.body.appendChild(jsonpScript);
-
-    envioTimeout=setTimeout(()=>{
-      if(jsonpScript){
-        jsonpScript.remove();
-        jsonpScript=null;
-      }
-      errorBox.textContent='O Google Apps Script não respondeu em 20 segundos. Consulte Apps Script > Execuções.';
-      errorBox.style.display='block';
-      submitBtn.disabled=false;
-      submitBtn.textContent='Concluir inscrição';
-    },20000);
+    // O Google Forms carregou a resposta no iframe.
+    document.getElementById('formCard').style.display='none';
+    document.getElementById('successBox').style.display='block';
+    window.scrollTo({top:0,behavior:'smooth'});
   });
 
   updateUI();
