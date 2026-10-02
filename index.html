@@ -287,39 +287,102 @@
   nextBtn.addEventListener('click',()=>{if(validatePanel()){current++;updateUI()}});
   backBtn.addEventListener('click',()=>{if(current>0){current--;updateUI()}});
 
-  form.addEventListener('submit', async (e)=>{
+  form.addEventListener('submit', (e)=>{
     e.preventDefault();
     if(!validatePanel()) return;
+
     const numEducandos=Number(document.querySelector('input[name="numEducandos"]:checked')?.value || 0);
-    if(!numEducandos){ errorBox.textContent='Indique o número de educandos.'; errorBox.style.display='block'; return; }
-    const payload={
-      email:email.value.trim(), nome:document.getElementById('nome').value.trim(), telemovel:phone.value.trim(), nif:nif.value.trim(),
-      numEducandos,
-      educandos:[],
-      valor:valor.value,
-      pagamento:document.querySelector('input[name="pagamento"]:checked')?.value || '',
-      rgpd:document.querySelector('input[name="rgpd"]:checked')?.value || '',
-      comunicacoes:document.querySelector('input[name="comunicacoes"]:checked')?.value || ''
+    if(!numEducandos){
+      errorBox.textContent='Indique o número de educandos.';
+      errorBox.style.display='block';
+      return;
+    }
+
+    const payload = {
+      email: email.value.trim(),
+      nome: document.getElementById('nome').value.trim(),
+      telemovel: phone.value.trim(),
+      nif: nif.value.trim(),
+      numEducandos: String(numEducandos),
+      educando1: '',
+      ano1: '',
+      turma1: '',
+      educando2: '',
+      ano2: '',
+      turma2: '',
+      educando3: '',
+      ano3: '',
+      turma3: '',
+      valor: valor.value,
+      pagamento: document.querySelector('input[name="pagamento"]:checked')?.value || '',
+      rgpd: document.querySelector('input[name="rgpd"]:checked')?.value || '',
+      comunicacoes: document.querySelector('input[name="comunicacoes"]:checked')?.value || ''
     };
-    for(let i=1;i<=numEducandos;i++) payload.educandos.push({
-      nome:document.getElementById(`educando${i}Nome`).value.trim(),
-      ano:document.getElementById(`educando${i}Ano`).value,
-      turma:document.getElementById(`educando${i}Turma`).value
+
+    for(let i=1;i<=numEducandos;i++){
+      payload['educando'+i] = document.getElementById(`educando${i}Nome`).value.trim();
+      payload['ano'+i] = document.getElementById(`educando${i}Ano`).value;
+      payload['turma'+i] = document.getElementById(`educando${i}Turma`).value;
+    }
+
+    // Envio por formulário HTML para iframe oculto.
+    // Isto evita CORS/redirects do Google Apps Script que faziam o fetch falhar.
+    let bridge = document.getElementById('appsScriptBridge');
+    if(bridge) bridge.remove();
+
+    bridge = document.createElement('form');
+    bridge.id = 'appsScriptBridge';
+    bridge.method = 'POST';
+    bridge.action = APPS_SCRIPT_URL;
+    bridge.target = 'appsScriptFrame';
+    bridge.style.display = 'none';
+
+    Object.entries(payload).forEach(([name,value])=>{
+      const input=document.createElement('input');
+      input.type='hidden';
+      input.name=name;
+      input.value=value ?? '';
+      bridge.appendChild(input);
     });
 
-    submitBtn.disabled=true; submitBtn.textContent='A enviar...'; errorBox.style.display='none';
-    try{
-      const res=await fetch(APPS_SCRIPT_URL,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(payload)});
-      const txt=await res.text(); let data={}; try{data=JSON.parse(txt)}catch(_){}
-      if(!res.ok || data.ok===false) throw new Error(data.error || 'Falha no envio');
+    document.body.appendChild(bridge);
+
+    submitBtn.disabled=true;
+    submitBtn.textContent='A enviar...';
+    errorBox.style.display='none';
+
+    let frame = document.getElementById('appsScriptFrame');
+    if(!frame){
+      frame=document.createElement('iframe');
+      frame.id='appsScriptFrame';
+      frame.name='appsScriptFrame';
+      frame.style.display='none';
+      document.body.appendChild(frame);
+    }
+
+    let started=false;
+    const timeout=setTimeout(()=>{
+      if(document.getElementById('formCard').style.display!=='none'){
+        errorBox.textContent='O envio está a demorar mais do que o esperado. Confirme nas respostas do formulário antes de tentar novamente.';
+        errorBox.style.display='block';
+        submitBtn.disabled=false;
+        submitBtn.textContent='Concluir inscrição';
+      }
+    },12000);
+
+    frame.onload=()=>{
+      if(!started){ started=true; return; }
+      clearTimeout(timeout);
       document.getElementById('formCard').style.display='none';
       document.getElementById('successBox').style.display='block';
       window.scrollTo({top:0,behavior:'smooth'});
-    }catch(err){
-      errorBox.textContent='Não foi possível concluir a inscrição. Tente novamente ou contacte a APEG.';
-      errorBox.style.display='block'; submitBtn.disabled=false; submitBtn.textContent='Concluir inscrição'; console.error(err);
-    }
+    };
+
+    // Marca o primeiro load do iframe vazio; o segundo será a resposta do Apps Script.
+    started=true;
+    bridge.submit();
   });
+
   updateUI();
 </script>
 </body>
