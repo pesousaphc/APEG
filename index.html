@@ -20,7 +20,7 @@
     .nav{max-width:1240px;margin:auto;padding:14px 22px;display:flex;align-items:center;justify-content:space-between;gap:20px}
     .brand{display:flex;align-items:center;gap:14px}.brand img{width:84px;height:84px;object-fit:contain;border-radius:16px;background:#fff;padding:2px;border:1px solid #e2e8f0}
     .brand-text strong{display:block;font-size:1.22rem;color:var(--navy)}.brand-text span{font-size:.88rem;color:var(--muted)}
-    .pill{background:linear-gradient(135deg,var(--blue),var(--blue-2));color:#fff;padding:12px 18px;border-radius:14px;font-weight:700;box-shadow:0 8px 20px rgba(23,105,224,.22)}
+    .pill{background:linear-gradient(135deg,var(--blue),var(--blue-2));color:#fff;padding:12px 18px;border-radius:14px;font-weight:700;box-shadow:0 8px 20px rgba(23,105,224,.22);border:0;cursor:pointer}
     .layout{max-width:1240px;margin:34px auto;padding:0 22px;display:grid;grid-template-columns:.82fr 1.18fr;gap:28px}
     .side{display:flex;flex-direction:column;gap:20px}.hero,.info-card,.form-card,.success{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow)}
     .hero{padding:34px;overflow:hidden;position:relative}.hero:after{content:"";position:absolute;width:190px;height:190px;right:-70px;top:-70px;background:linear-gradient(135deg,rgba(23,105,224,.15),rgba(247,165,26,.16));border-radius:50%}
@@ -53,7 +53,7 @@
       <img src="logo-apeg.jpg" alt="Logótipo APEG">
       <div class="brand-text"><strong>APEG</strong><span>Associação de Pais da Escola da Giesta</span></div>
     </div>
-    <div class="pill">Inscrição de Sócio</div>
+    <button type="button" class="pill" id="restartBtn">Inscrição de Sócio</button>
   </div>
 </header>
 
@@ -84,6 +84,9 @@
       <div class="progress"><span id="progressBar"></span></div>
 
       <form id="apegForm" action="https://docs.google.com/forms/d/e/1FAIpQLSfvE6RBYS3lQjzn7jFIvS0D6CxyKBxCUYjrH2aoDaMUs-Rtrg/formResponse" method="POST" target="googleFormsFrame" novalidate>
+        <input type="hidden" name="pageHistory" value="0,1,2,3">
+        <input type="hidden" name="fvv" value="1">
+        <input type="hidden" name="submit" value="Submit">
         <div class="panel active">
           <div class="section-title"><div class="section-icon">👤</div><div><h2>Dados pessoais</h2><p>Preencha os seus dados para efetuar a inscrição como associado.</p></div></div>
           <div class="grid">
@@ -327,6 +330,47 @@ const panels=[...document.querySelectorAll('.panel')];
     // O Google Forms carregou a resposta no iframe.
     document.getElementById('formCard').style.display='none';
     document.getElementById('successBox').style.display='block';
+    window.scrollTo({top:0,behavior:'smooth'});
+  });
+
+
+  const restartBtn=document.getElementById('restartBtn');
+  restartBtn.addEventListener('click',()=>{
+    // Voltar sempre ao início, pronto para uma nova inscrição.
+    form.reset();
+    current=0;
+    envioIniciado=false;
+
+    // Repõe o valor mínimo da quota.
+    valor.value='10';
+
+    // Esconde educandos até voltar a escolher 1, 2 ou 3.
+    for(let i=1;i<=3;i++){
+      const block=document.getElementById(`educando${i}`);
+      if(block) block.style.display='none';
+
+      const nome=document.getElementById(`educando${i}Nome`);
+      const ano=document.getElementById(`educando${i}Ano`);
+      const turma=document.getElementById(`educando${i}Turma`);
+
+      if(nome){ nome.value=''; nome.required=false; nome.disabled=false; }
+      if(ano){ ano.value=''; ano.required=false; ano.disabled=false; }
+      if(turma){
+        turma.innerHTML='<option value="">Selecione primeiro o ano</option>';
+        turma.value='';
+        turma.required=false;
+        turma.disabled=true;
+      }
+    }
+
+    errorBox.style.display='none';
+    submitBtn.disabled=false;
+    submitBtn.textContent='Concluir inscrição';
+
+    document.getElementById('successBox').style.display='none';
+    document.getElementById('formCard').style.display='block';
+
+    updateUI();
     window.scrollTo({top:0,behavior:'smooth'});
   });
 
