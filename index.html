@@ -110,32 +110,44 @@
         </div>
 
         <div class="panel">
-          <div class="section-title"><div class="section-icon">🎓</div><div><h2>Dados do educando</h2><p>Indique os dados do aluno associado à inscrição.</p></div></div>
-          <div class="grid">
-            <div class="full">
-              <label>Nome do educando <span class="req">*</span></label>
-              <input id="educando" type="text" required placeholder="Nome do educando">
+          <div class="section-title"><div class="section-icon">🎓</div><div><h2>Dados dos educandos</h2><p>Indique quantos educandos pretende associar a esta inscrição.</p></div></div>
+
+          <div class="full" style="margin-bottom:20px">
+            <label>Número de educandos <span class="req">*</span></label>
+            <div class="choice-list" style="grid-template-columns:repeat(3,1fr)">
+              <label class="choice"><input type="radio" name="numEducandos" value="1" required><div><strong>1 educando</strong></div></label>
+              <label class="choice"><input type="radio" name="numEducandos" value="2"><div><strong>2 educandos</strong></div></label>
+              <label class="choice"><input type="radio" name="numEducandos" value="3"><div><strong>3 educandos</strong></div></label>
             </div>
-            <div>
-              <label>Ano <span class="req">*</span></label>
-              <select id="ano" required>
-                <option value="">Selecionar</option>
-                <option>Pré</option>
-                <option>1º Ano</option>
-                <option>2º Ano</option>
-                <option>3º Ano</option>
-                <option>4º Ano</option>
-              </select>
+          </div>
+
+          <div id="educando1" class="educando-block" style="display:none">
+            <h3 style="color:var(--navy);margin:10px 0 16px">Educando 1</h3>
+            <div class="grid">
+              <div class="full"><label>Nome do educando <span class="req">*</span></label><input id="educando1Nome" type="text" placeholder="Nome do educando"></div>
+              <div><label>Ano <span class="req">*</span></label><select id="educando1Ano"><option value="">Selecionar</option><option>Pré</option><option>1º Ano</option><option>2º Ano</option><option>3º Ano</option><option>4º Ano</option></select></div>
+              <div><label>Turma <span class="req">*</span></label><select id="educando1Turma" disabled><option value="">Selecione primeiro o ano</option></select></div>
             </div>
-            <div>
-              <label>Turma <span class="req">*</span></label>
-              <select id="turma" required disabled>
-                <option value="">Selecione primeiro o ano</option>
-              </select>
+          </div>
+
+          <div id="educando2" class="educando-block" style="display:none;margin-top:24px;padding-top:22px;border-top:1px solid var(--line)">
+            <h3 style="color:var(--navy);margin:0 0 16px">Educando 2</h3>
+            <div class="grid">
+              <div class="full"><label>Nome do educando <span class="req">*</span></label><input id="educando2Nome" type="text" placeholder="Nome do educando"></div>
+              <div><label>Ano <span class="req">*</span></label><select id="educando2Ano"><option value="">Selecionar</option><option>Pré</option><option>1º Ano</option><option>2º Ano</option><option>3º Ano</option><option>4º Ano</option></select></div>
+              <div><label>Turma <span class="req">*</span></label><select id="educando2Turma" disabled><option value="">Selecione primeiro o ano</option></select></div>
+            </div>
+          </div>
+
+          <div id="educando3" class="educando-block" style="display:none;margin-top:24px;padding-top:22px;border-top:1px solid var(--line)">
+            <h3 style="color:var(--navy);margin:0 0 16px">Educando 3</h3>
+            <div class="grid">
+              <div class="full"><label>Nome do educando <span class="req">*</span></label><input id="educando3Nome" type="text" placeholder="Nome do educando"></div>
+              <div><label>Ano <span class="req">*</span></label><select id="educando3Ano"><option value="">Selecionar</option><option>Pré</option><option>1º Ano</option><option>2º Ano</option><option>3º Ano</option><option>4º Ano</option></select></div>
+              <div><label>Turma <span class="req">*</span></label><select id="educando3Turma" disabled><option value="">Selecione primeiro o ano</option></select></div>
             </div>
           </div>
         </div>
-
         <div class="panel">
           <div class="section-title"><div class="section-icon">€</div><div><h2>Quota e pagamento</h2><p>Escolha o valor da quota e a forma de pagamento.</p></div></div>
           <div class="grid">
@@ -192,7 +204,6 @@
 <footer>APEG — Associação de Pais da Escola da Giesta · Página de inscrição de associado</footer>
 
 <script>
-  // SUBSTITUIR pelo URL do Google Apps Script publicado como "Aplicação Web".
   const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxgsJ7PRif3BN-104mGDiHd31LQonDWWM1afNl3HoWQwqSEo3hjFRwOnV3vDUYW_IWO8g/exec";
 
   const panels=[...document.querySelectorAll('.panel')];
@@ -201,39 +212,40 @@
         submitBtn=document.getElementById('submitBtn'), progressBar=document.getElementById('progressBar'),
         errorBox=document.getElementById('formError'), form=document.getElementById('apegForm');
   const email=document.getElementById('email'), phone=document.getElementById('telemovel'),
-        nif=document.getElementById('nif'), valor=document.getElementById('valor'),
-        ano=document.getElementById('ano'), turma=document.getElementById('turma');
+        nif=document.getElementById('nif'), valor=document.getElementById('valor');
   let current=0;
 
-  function onlyDigits(el){
-    el.value = el.value.replace(/\D/g,'');
-  }
+  function onlyDigits(el){ el.value = el.value.replace(/\D/g,''); }
   phone.addEventListener('input',()=>onlyDigits(phone));
   nif.addEventListener('input',()=>onlyDigits(nif));
 
-  ano.addEventListener('change',()=>{
-    const v=ano.value;
-    turma.innerHTML='';
-    const first=document.createElement('option');
-    first.value=''; first.textContent='Selecionar';
-    turma.appendChild(first);
-    let opts=[];
-    if(v==='Pré') opts=['Sala 6','Sala 7'];
-    else if(v) opts=['T','E'];
-    opts.forEach(o=>{
-      const op=document.createElement('option'); op.value=o; op.textContent=o; turma.appendChild(op);
+  function configureTurma(anoEl,turmaEl){
+    anoEl.addEventListener('change',()=>{
+      turmaEl.innerHTML='<option value="">Selecionar</option>';
+      let opts=[];
+      if(anoEl.value==='Pré') opts=[['Sala 6','Sala 6'],['Sala 7','Sala 7']];
+      else if(anoEl.value) opts=[['D','Turma D'],['E','Turma E']];
+      opts.forEach(([value,label])=>{ const op=document.createElement('option'); op.value=value; op.textContent=label; turmaEl.appendChild(op); });
+      turmaEl.disabled=!anoEl.value; turmaEl.value='';
     });
-    turma.disabled=!v;
-    turma.value='';
-  });
+  }
+  for(let i=1;i<=3;i++) configureTurma(document.getElementById(`educando${i}Ano`), document.getElementById(`educando${i}Turma`));
 
-  function validEmail(v){
-    return /^[^\s@]+@[^\s@]+\.[A-Za-z]{2,}$/.test(v.trim());
+  function setEducandos(qtd){
+    for(let i=1;i<=3;i++){
+      const block=document.getElementById(`educando${i}`);
+      const active=i<=qtd;
+      block.style.display=active?'block':'none';
+      ['Nome','Ano','Turma'].forEach(s=>{
+        const el=document.getElementById(`educando${i}${s}`);
+        if(el){ el.required=active; if(!active){ el.value=''; if(s==='Turma') el.disabled=true; } }
+      });
+    }
   }
-  function setErr(el,id,on){
-    el.classList.toggle('invalid',on);
-    document.getElementById(id)?.classList.toggle('show',on);
-  }
+  document.querySelectorAll('input[name="numEducandos"]').forEach(r=>r.addEventListener('change',()=>setEducandos(Number(r.value))));
+
+  function validEmail(v){ return /^[^\s@]+@[^\s@]+\.[A-Za-z]{2,}$/.test(v.trim()); }
+  function setErr(el,id,on){ el.classList.toggle('invalid',on); document.getElementById(id)?.classList.toggle('show',on); }
   function validateCustom(){
     let ok=true;
     if(email.closest('.panel').classList.contains('active')){
@@ -249,15 +261,14 @@
   function validatePanel(){
     errorBox.style.display='none';
     let ok=validateCustom();
-    const fields=[...panels[current].querySelectorAll('input,select')];
+    const fields=[...panels[current].querySelectorAll('input,select')].filter(el=>el.offsetParent!==null);
     const radioNames=new Set();
     fields.forEach(f=>{
-      if(f.type==='radio'){ radioNames.add(f.name); return; }
-      if(f.required && !f.value){ f.classList.add('invalid'); ok=false; }
-      else if(!f.classList.contains('invalid')) f.classList.remove('invalid');
+      if(f.type==='radio'){radioNames.add(f.name);return;}
+      if(f.required && !f.value){f.classList.add('invalid');ok=false;} else if(!f.classList.contains('invalid')) f.classList.remove('invalid');
     });
     radioNames.forEach(name=>{
-      const group=[...panels[current].querySelectorAll(`input[type="radio"][name="${name}"]`)];
+      const group=[...panels[current].querySelectorAll(`input[type="radio"][name="${name}"]`)].filter(r=>r.offsetParent!==null);
       if(group.some(r=>r.required) && !group.some(r=>r.checked)) ok=false;
     });
     if(!ok) errorBox.style.display='block';
@@ -279,54 +290,36 @@
   form.addEventListener('submit', async (e)=>{
     e.preventDefault();
     if(!validatePanel()) return;
-    if(!APPS_SCRIPT_URL || APPS_SCRIPT_URL.includes('COLOQUE_AQUI')){
-      errorBox.textContent='Falta configurar o URL do Google Apps Script no ficheiro index.html.';
-      errorBox.style.display='block';
-      return;
-    }
-
-    const pagamento=document.querySelector('input[name="pagamento"]:checked')?.value || '';
-    const rgpd=document.querySelector('input[name="rgpd"]:checked')?.value || '';
-    const comunicacoes=document.querySelector('input[name="comunicacoes"]:checked')?.value || '';
-
+    const numEducandos=Number(document.querySelector('input[name="numEducandos"]:checked')?.value || 0);
+    if(!numEducandos){ errorBox.textContent='Indique o número de educandos.'; errorBox.style.display='block'; return; }
     const payload={
-      email: email.value.trim(),
-      nome: document.getElementById('nome').value.trim(),
-      telemovel: phone.value.trim(),
-      nif: nif.value.trim(),
-      educando: document.getElementById('educando').value.trim(),
-      ano: ano.value,
-      turma: turma.value,
-      valor: valor.value,
-      pagamento, rgpd, comunicacoes
+      email:email.value.trim(), nome:document.getElementById('nome').value.trim(), telemovel:phone.value.trim(), nif:nif.value.trim(),
+      numEducandos,
+      educandos:[],
+      valor:valor.value,
+      pagamento:document.querySelector('input[name="pagamento"]:checked')?.value || '',
+      rgpd:document.querySelector('input[name="rgpd"]:checked')?.value || '',
+      comunicacoes:document.querySelector('input[name="comunicacoes"]:checked')?.value || ''
     };
+    for(let i=1;i<=numEducandos;i++) payload.educandos.push({
+      nome:document.getElementById(`educando${i}Nome`).value.trim(),
+      ano:document.getElementById(`educando${i}Ano`).value,
+      turma:document.getElementById(`educando${i}Turma`).value
+    });
 
-    submitBtn.disabled=true;
-    submitBtn.textContent='A enviar...';
-    errorBox.style.display='none';
-
+    submitBtn.disabled=true; submitBtn.textContent='A enviar...'; errorBox.style.display='none';
     try{
-      const res=await fetch(APPS_SCRIPT_URL,{
-        method:'POST',
-        headers:{'Content-Type':'text/plain;charset=utf-8'},
-        body:JSON.stringify(payload)
-      });
-      const txt=await res.text();
-      let data={};
-      try{data=JSON.parse(txt)}catch(_){}
+      const res=await fetch(APPS_SCRIPT_URL,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(payload)});
+      const txt=await res.text(); let data={}; try{data=JSON.parse(txt)}catch(_){}
       if(!res.ok || data.ok===false) throw new Error(data.error || 'Falha no envio');
       document.getElementById('formCard').style.display='none';
       document.getElementById('successBox').style.display='block';
       window.scrollTo({top:0,behavior:'smooth'});
     }catch(err){
       errorBox.textContent='Não foi possível concluir a inscrição. Tente novamente ou contacte a APEG.';
-      errorBox.style.display='block';
-      submitBtn.disabled=false;
-      submitBtn.textContent='Concluir inscrição';
-      console.error(err);
+      errorBox.style.display='block'; submitBtn.disabled=false; submitBtn.textContent='Concluir inscrição'; console.error(err);
     }
   });
-
   updateUI();
 </script>
 </body>
