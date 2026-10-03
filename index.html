@@ -286,7 +286,6 @@ const panels=[...document.querySelectorAll('.panel')];
     nextBtn.style.display=current===panels.length-1?'none':'inline-block';
     submitBtn.style.display=current===panels.length-1?'inline-block':'none';
     errorBox.style.display='none';
-    window.scrollTo({top:0,behavior:'smooth'});
   }
   nextBtn.addEventListener('click',()=>{if(validatePanel()){current++;updateUI()}});
   backBtn.addEventListener('click',()=>{if(current>0){current--;updateUI()}});
@@ -294,10 +293,7 @@ const panels=[...document.querySelectorAll('.panel')];
   let envioIniciado=false;
   const googleFormsFrame=document.getElementById('googleFormsFrame');
 
-  form.addEventListener('submit',(e)=>{
-    e.preventDefault();
-    if(!validatePanel()) return;
-
+  async function enviarParaGoogleForms(){
     const numEducandos=Number(
       document.querySelector('input[data-role="numEducandos"]:checked')?.value || 0
     );
@@ -308,7 +304,7 @@ const panels=[...document.querySelectorAll('.panel')];
       return;
     }
 
-    // Não enviar os campos dos educandos que não foram selecionados.
+    // Não incluir educandos que não foram selecionados.
     for(let i=1;i<=3;i++){
       const active=i<=numEducandos;
       ['Nome','Ano','Turma'].forEach(s=>{
@@ -317,22 +313,55 @@ const panels=[...document.querySelectorAll('.panel')];
       });
     }
 
+    const formData=new FormData(form);
+
     envioIniciado=true;
     submitBtn.disabled=true;
     submitBtn.textContent='A enviar...';
     errorBox.style.display='none';
 
-    // POST direto para Google Forms, sem Apps Script.
-    HTMLFormElement.prototype.submit.call(form);
+    try{
+      // Envio direto para Google Forms.
+      // mode:no-cors evita bloqueios de CORS e funciona melhor em Chrome/Android.
+      await fetch(form.action,{
+        method:'POST',
+        mode:'no-cors',
+        body:formData,
+        cache:'no-store',
+        credentials:'omit',
+        keepalive:true
+      });
+
+      document.getElementById('formCard').style.display='none';
+      document.getElementById('successBox').style.display='block';
+
+    }catch(err){
+      console.warn('Fetch falhou; a tentar envio nativo para iframe.',err);
+
+      // Fallback para browsers onde fetch cross-origin seja bloqueado.
+      try{
+        HTMLFormElement.prototype.submit.call(form);
+      }catch(err2){
+        errorBox.textContent='Não foi possível enviar a inscrição. Verifique a ligação à internet e tente novamente.';
+        errorBox.style.display='block';
+        submitBtn.disabled=false;
+        submitBtn.textContent='Concluir inscrição';
+        envioIniciado=false;
+      }
+    }
+  }
+
+  form.addEventListener('submit',(e)=>{
+    e.preventDefault();
+    if(!validatePanel()) return;
+    enviarParaGoogleForms();
   });
 
+  // Só é usado pelo fallback nativo.
   googleFormsFrame.addEventListener('load',()=>{
     if(!envioIniciado) return;
-
-    // O Google Forms carregou a resposta no iframe.
     document.getElementById('formCard').style.display='none';
     document.getElementById('successBox').style.display='block';
-    window.scrollTo({top:0,behavior:'smooth'});
   });
 
 
@@ -373,7 +402,7 @@ const panels=[...document.querySelectorAll('.panel')];
     document.getElementById('formCard').style.display='block';
 
     updateUI();
-    window.scrollTo({top:0,behavior:'smooth'});
+    document.getElementById('formCard').scrollIntoView({behavior:'smooth',block:'start'});
   });
 
   updateUI();
