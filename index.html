@@ -27,7 +27,7 @@
     .hero h1{font-size:clamp(2.1rem,4vw,4rem);line-height:1.02;margin:0 0 18px;color:var(--navy);max-width:8ch}.hero p{font-size:1.05rem;line-height:1.65;color:var(--muted);margin:0}
     .benefits{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:24px}.benefit{display:flex;gap:10px;align-items:center;padding:13px;border-radius:16px;background:#f7faff;border:1px solid #e4edf8;font-size:.92rem;font-weight:650}
     .dot{width:34px;height:34px;display:grid;place-items:center;border-radius:50%;background:#e7f1ff;color:var(--blue)}
-    .info-card{padding:24px}.info-card h3{margin:0 0 9px;color:var(--navy)}.info-card p{margin:0;color:var(--muted);line-height:1.55}.fee{font-size:2rem;font-weight:800;color:var(--navy);margin:8px 0}
+    .iban-copy{overflow-wrap:anywhere;word-break:normal;user-select:all} .info-card{padding:24px}.info-card h3{margin:0 0 9px;color:var(--navy)}.info-card p{margin:0;color:var(--muted);line-height:1.55}.fee{font-size:2rem;font-weight:800;color:var(--navy);margin:8px 0}
     .form-card{padding:28px}.steps{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:28px}.step{text-align:center}.step .n{margin:auto;width:36px;height:36px;border-radius:50%;display:grid;place-items:center;background:#e9eef5;color:#6d7b90;font-weight:800}
     .step.active .n{background:var(--blue);color:#fff}.step.done .n{background:var(--ok);color:#fff}.step small{display:block;margin-top:8px;color:#718096;font-size:.75rem}.step.active small{color:var(--blue);font-weight:800}
     .panel{display:none}.panel.active{display:block}.section-title{display:flex;align-items:center;gap:14px;margin-bottom:20px}.section-icon{width:52px;height:52px;border-radius:16px;display:grid;place-items:center;background:#eaf3ff;color:var(--blue);font-size:1.5rem}
@@ -70,7 +70,7 @@
       </div>
     </div>
     <div class="info-card"><h3>Porquê ser associado?</h3><p>Ao tornar-se associado da APEG contribui para iniciativas, projetos e atividades que enriquecem a vida escolar dos nossos filhos.</p></div>
-    <div class="info-card"><h3>Quota anual</h3><div class="fee">5€ <span style="font-size:1rem;font-weight:600">mínimo</span></div><p>Pode contribuir com o valor que pretender, a partir de 5 €.</p></div>
+    <div class="info-card"><h3>Quota anual</h3><div class="fee">5€ <span style="font-size:1rem;font-weight:600">mínimo</span></div><p>Pode contribuir com o valor que pretender, a partir de 5 €.</p><p style="margin-top:14px"><strong>IBAN da associação</strong></p><p class="iban-copy">PT50 0033 0000 4548 4837 6450 5</p></div>
   </section>
 
   <section>
@@ -151,7 +151,7 @@
           <div class="grid">
             <div class="full">
               <label>Valor que pretende pagar (€) <span class="req">*</span></label>
-              <input id="valor" name="entry.1815716533" type="number" required min="5" step="1" value="5">
+              <input id="valor" name="entry.1815716533" type="number" required min="5" step="1" placeholder="Valor mínimo: 5 €" aria-describedby="valorAjuda valueError"><div id="valorAjuda" style="margin-top:7px;color:var(--muted);font-size:.88rem">A quota mínima é de 5 €. Introduza o valor com que pretende contribuir.</div>
               <div class="field-error" id="valueError">O valor mínimo da quota anual é 5 €.</div>
             </div>
             <div class="full">
@@ -200,7 +200,7 @@
       <div class="big">🎉</div>
       <h2>Inscrição registada!</h2>
       <p>Obrigado por se juntar à APEG. A sua inscrição foi enviada com sucesso.</p>
-      <p>Se efetuou pagamento por transferência, não se esqueça de enviar o comprovativo para o email da associação.</p>
+      <p>Se escolheu transferência bancária, pode utilizar o IBAN da associação:</p><p class="iban-copy" style="font-weight:800;color:var(--navy);font-size:1.08rem">PT50 0033 0000 4548 4837 6450 5</p><p>Após a transferência, envie o comprovativo para <strong>apeb1giesta@gmail.com</strong>, indicando o nome do encarregado de educação e do(s) educando(s).</p>
     </div>
   </section>
 </main>
@@ -253,7 +253,7 @@ const panels=[...document.querySelectorAll('.panel')];
       const pbad=!/^\d{9}$/.test(phone.value); setErr(phone,'phoneError',pbad); if(pbad) ok=false;
     }
     if(valor.closest('.panel').classList.contains('active')){
-      const vbad=Number(valor.value)<5; setErr(valor,'valueError',vbad); if(vbad) ok=false;
+      const vbad=valor.value.trim()==='' || !Number.isFinite(Number(valor.value)) || Number(valor.value)<5 || !valor.checkValidity(); setErr(valor,'valueError',vbad); if(vbad) ok=false;
     }
     return ok;
   }
@@ -368,7 +368,7 @@ const panels=[...document.querySelectorAll('.panel')];
     envioIniciado=false;
 
     // Repõe o valor mínimo da quota.
-    valor.value='5';
+    valor.value='';
 
     // Esconde educandos até voltar a escolher 1, 2 ou 3.
     for(let i=1;i<=3;i++){
