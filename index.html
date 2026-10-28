@@ -196,6 +196,12 @@
 <iframe name="googleFormsFrame" id="googleFormsFrame" style="display:none"></iframe>
     </div>
 
+    <div id="validationBox" class="notice" style="display:none;margin-top:18px" role="status" aria-live="polite">
+      <p id="validationText" style="margin:0 0 12px">A validar a inscrição...</p>
+      <div class="progress" style="margin:0 0 14px"><span id="validationProgress" style="width:0%"></span></div>
+      <button type="button" class="btn-primary" id="retryValidationBtn" style="display:none;margin-right:8px">Verificar novamente</button>
+      <button type="button" class="btn-secondary" id="resendBtn" style="display:none">Preparar novo envio</button>
+    </div>
     <div class="success" id="successBox">
       <div class="big">🎉</div>
       <h2>Inscrição registada!</h2>
@@ -285,82 +291,143 @@ const panels=[...document.querySelectorAll('.panel')];
   nextBtn.addEventListener('click',()=>{if(validatePanel()){current++;updateUI()}});
   backBtn.addEventListener('click',()=>{if(current>0){current--;updateUI()}});
 
-  let envioIniciado=false;
-  const googleFormsFrame=document.getElementById('googleFormsFrame');
-
-  async function enviarParaGoogleForms(){
-    const numEducandos=Number(
-      document.querySelector('input[data-role="numEducandos"]:checked')?.value || 0
-    );
-
-    if(!numEducandos){
-      errorBox.textContent='Indique o número de educandos.';
-      errorBox.style.display='block';
-      return;
-    }
-
-    // Não incluir educandos que não foram selecionados.
-    for(let i=1;i<=3;i++){
-      const active=i<=numEducandos;
-      ['Nome','Ano','Turma'].forEach(s=>{
-        const el=document.getElementById(`educando${i}${s}`);
-        if(el) el.disabled=!active;
-      });
-    }
-
-    const formData=new FormData(form);
-
-    envioIniciado=true;
-    submitBtn.disabled=true;
-    submitBtn.textContent='A enviar...';
-    errorBox.style.display='none';
-
-    try{
-      // Envio direto para Google Forms.
-      // mode:no-cors evita bloqueios de CORS e funciona melhor em Chrome/Android.
-      await fetch(form.action,{
-        method:'POST',
-        mode:'no-cors',
-        body:formData,
-        cache:'no-store',
-        credentials:'omit',
-        keepalive:true
-      });
-
-      document.getElementById('formCard').style.display='none';
-      document.getElementById('successBox').style.display='block';
-
-    }catch(err){
-      console.warn('Fetch falhou; a tentar envio nativo para iframe.',err);
-
-      // Fallback para browsers onde fetch cross-origin seja bloqueado.
-      try{
-        HTMLFormElement.prototype.submit.call(form);
-      }catch(err2){
-        errorBox.textContent='Não foi possível enviar a inscrição. Verifique a ligação à internet e tente novamente.';
-        errorBox.style.display='block';
-        submitBtn.disabled=false;
-        submitBtn.textContent='Concluir inscrição';
-        envioIniciado=false;
-      }
-    }
-  }
-
-  form.addEventListener('submit',(e)=>{
-    e.preventDefault();
-    if(!validatePanel()) return;
-    enviarParaGoogleForms();
-  });
-
-  // Só é usado pelo fallback nativo.
-  googleFormsFrame.addEventListener('load',()=>{
-    if(!envioIniciado) return;
-    document.getElementById('formCard').style.display='none';
-    document.getElementById('successBox').style.display='block';
-  });
-
-
-  const restartBtn=document.getElementById('restartBtn');
+     // Confirmacao de registo na folha publicada da APEG.
+   const SHEET_CSV_URL='https://docs.google.com/spreadsheets/d/e/2PACX-1vSF0P3Bw_DmwwySze4u8OMxM_Ndxt-d_IlhdDHa_W3Do4CfT5QiGLHmC9M2R9aTLURNffqMJwHmb8Qp/pub?output=csv';
+   const MAX_WAIT_MS=17000;
+   let envioIniciado=false, validacaoEmCurso=false, linhasAntes=null;
+   const googleFormsFrame=document.getElementById('googleFormsFrame');
+   const validationBox=document.getElementById('validationBox');
+   const validationText=document.getElementById('validationText');
+   const validationProgress=document.getElementById('validationProgress');
+   const retryValidationBtn=document.getElementById('retryValidationBtn');
+   const resendBtn=document.getElementById('resendBtn');
+   const sleep=ms=>new Promise(resolve=>setTimeout(resolve,ms));
+   function parseCSV(input){
+     const rows=[]; let row=[],field='',quoted=false;
+     input=input.replace(/^\uFEFF/,'');
+     for(let i=0;i<input.length;i++){
+       const c=input[i];
+       if(c==='"'){
+         if(quoted && input[i+1]==='"'){field+='"';i++;}
+         else quoted=!quoted;
+       }else if(c===','&&!quoted){row.push(field);field='';}
+       else if((c==='\n'||c==='\r')&&!quoted){
+         if(c==='\r'&&input[i+1]==='\n')i++;
+         row.push(field);if(row.some(v=>v!==''))rows.push(row);
+         row=[];field='';
+       }else field+=c;
+     }
+     if(field!==''||row.length){row.push(field);rows.push(row);}
+     return rows;
+   }
+   function normalizar(s){return String(s??'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').trim().replace(/\s+/g,' ').toLocaleLowerCase('pt-PT');}
+   function normalizarTelefone(s){return String(s??'').replace(/\D/g,'');}
+   function registoCorresponde(row){
+     return normalizar(row[1])===normalizar(email.value)
+       && normalizar(row[2])===normalizar(document.getElementById('nome').value)
+       && normalizarTelefone(row[3])===normalizarTelefone(phone.value);
+   }
+   function assinaturaLinha(row){return JSON.stringify(row);}
+   async function consultarFolha(){
+     const controller=new AbortController();
+     const timeout=setTimeout(()=>controller.abort(),4500);
+     try{
+       const url=SHEET_CSV_URL+'&_apeg='+Date.now();
+       const response=await fetch(url,{cache:'no-store',signal:controller.signal});
+       if(!response.ok)throw new Error('HTTP '+response.status);
+       const csv=await response.text();
+       const rows=parseCSV(csv);
+       if(!rows.length||normalizar(rows[0][0])!=='carimbo de data/hora')throw new Error('Estrutura inesperada na folha publicada');
+       return rows.slice(1);
+     }finally{clearTimeout(timeout);}
+   }
+   function mostrarValidacao(texto,progress=0){
+     validationBox.style.display='block';
+     validationText.textContent=texto;
+     validationProgress.style.width=Math.min(100,Math.max(0,progress))+'%';
+   }
+   function terminarComAviso(texto){
+     validacaoEmCurso=false;
+     mostrarValidacao(texto,100);
+     retryValidationBtn.style.display='inline-block';
+     resendBtn.style.display='inline-block';
+     submitBtn.disabled=true;
+     submitBtn.textContent='A aguardar confirmação';
+   }
+   async function confirmarNaFolha(){
+     if(validacaoEmCurso||!linhasAntes)return;
+     validacaoEmCurso=true;
+     retryValidationBtn.style.display='none';resendBtn.style.display='none';
+     mostrarValidacao('Estamos a confirmar que os seus dados foram registados na base de dados da APEG. Por favor, aguarde e não feche esta página...',0);
+     const inicio=Date.now();
+     while(Date.now()-inicio<MAX_WAIT_MS){
+       const elapsed=Date.now()-inicio;
+       validationProgress.style.width=Math.min(100,elapsed/MAX_WAIT_MS*100)+'%';
+       if(!navigator.onLine){mostrarValidacao('Sem ligação à Internet. A aguardar para confirmar a inscrição...',elapsed/MAX_WAIT_MS*100);}
+       else{
+         try{
+           const rows=await consultarFolha();
+           const atuais=new Map();
+           for(const row of rows){const sig=assinaturaLinha(row);atuais.set(sig,(atuais.get(sig)||0)+1);}
+           // Conta ocorrencias para distinguir inscricoes novas das ja existentes.
+           for(const [sig,quantidade] of atuais){
+             if(quantidade>(linhasAntes.get(sig)||0) && registoCorresponde(JSON.parse(sig))){
+               validacaoEmCurso=false;
+               validationBox.style.display='none';
+               document.getElementById('formCard').style.display='none';
+               document.getElementById('successBox').style.display='block';
+               return;
+             }
+           }
+         }catch(e){console.warn('Ainda sem leitura/confirmacao da folha:',e);}
+       }
+       const restante=MAX_WAIT_MS-(Date.now()-inicio);
+       if(restante>0)await sleep(Math.min(2000,restante));
+     }
+     terminarComAviso('Não foi possível confirmar a inscrição na base de dados da APEG em 17 segundos. Os seus dados foram mantidos. Pode verificar novamente. Não volte a enviar antes de confirmar se o registo já existe.');
+   }
+   async function enviarParaGoogleForms(){
+     if(envioIniciado||validacaoEmCurso)return;
+     const numEducandos=Number(document.querySelector('input[data-role="numEducandos"]:checked')?.value||0);
+     if(!numEducandos){errorBox.textContent='Indique o número de educandos.';errorBox.style.display='block';return;}
+     for(let i=1;i<=3;i++){
+       const active=i<=numEducandos;
+       ['Nome','Ano','Turma'].forEach(s=>{const el=document.getElementById(`educando${i}${s}`);if(el)el.disabled=!active;});
+     }
+     submitBtn.disabled=true;submitBtn.textContent='A preparar validação...';
+     errorBox.style.display='none';
+     mostrarValidacao('A verificar a ligação à base de dados da APEG...',0);
+     try{
+       const antes=await consultarFolha();
+       linhasAntes=new Map();
+       for(const row of antes){const sig=assinaturaLinha(row);linhasAntes.set(sig,(linhasAntes.get(sig)||0)+1);}
+     }catch(e){
+       console.warn('Falha na consulta inicial:',e);
+       validationBox.style.display='none';
+       errorBox.textContent='Não foi possível consultar a base de dados da APEG. A inscrição não foi enviada. Verifique a ligação à Internet e tente novamente.';
+       errorBox.style.display='block';submitBtn.disabled=false;submitBtn.textContent='Concluir inscrição';return;
+     }
+     const formData=new FormData(form);
+     envioIniciado=true;
+     mostrarValidacao('A enviar a inscrição e a aguardar confirmação na base de dados da APEG...',0);
+     try{
+       await fetch(form.action,{method:'POST',mode:'no-cors',body:formData,cache:'no-store',credentials:'omit'});
+     }catch(e){
+       // Um erro de rede pode ocorrer mesmo quando o pedido chegou ao destino.
+       console.warn('Envio sem confirmacao de transporte:',e);
+     }
+     await confirmarNaFolha();
+   }
+   form.addEventListener('submit',e=>{e.preventDefault();if(!validatePanel())return;enviarParaGoogleForms();});
+   retryValidationBtn.addEventListener('click',()=>confirmarNaFolha());
+   resendBtn.addEventListener('click',()=>{
+     // Nunca reenviar automaticamente; exige confirmacao explicita.
+     if(!confirm('Confirme primeiro que a inscrição não aparece na folha de registos. Pretende permitir um novo envio?'))return;
+     envioIniciado=false;linhasAntes=null;validationBox.style.display='none';
+     submitBtn.disabled=false;submitBtn.textContent='Concluir inscrição';
+   });
+   // O carregamento do iframe nao constitui confirmacao de gravacao.
+const restartBtn=document.getElementById('restartBtn');
   restartBtn.addEventListener('click',()=>{
     // Voltar sempre ao início, pronto para uma nova inscrição.
     form.reset();
